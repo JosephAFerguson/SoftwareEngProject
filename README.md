@@ -11,6 +11,7 @@ Modules needed - Backend: flask, torch, skikit-learn
     with the venv activated, the following:
       `conda install -c conda-forge scikit-learn`
       `pip install Flask`
+      `pip install flask flask-cors torch`
       `pip install torch torchvision torchaudio`
       to test in the terminal run:
       `python -c "import flask, torch, sklearn; print(f'Flask: {flask.__version__}\nPyTorch: {torch.__version__}\nSklearn: {sklearn.__version__}')"`
