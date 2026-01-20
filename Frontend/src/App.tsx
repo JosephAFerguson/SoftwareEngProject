@@ -1,6 +1,6 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom"
 import Nav from "./components/Nav"
-import Home from "./pages/Home"
+import Find from "./pages/Find"
 import Profile from "./pages/Profile"
 import Login from "./pages/Login"
 
@@ -10,7 +10,7 @@ export default function App() {
       <Nav />
 
       <Routes>
-        <Route path="/" element={<Home />} />
+        <Route path="/" element={<Find />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="/login" element={<Login />} />
       </Routes>
