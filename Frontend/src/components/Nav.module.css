@@ -1,5 +1,34 @@
-/* Nav.module.css */
 .nav {
   padding: 1rem;
-  background: #eee;
+  display: flex;
+  align-items: center;
+  background: var(--color-background);
+  border-bottom: 2px solid black;
+}
+
+/* Container for center links */
+.centerLinks {
+  display: flex;
+  gap: 4rem;
+  margin: 0 auto;
+}
+
+.link {
+  text-decoration: none;
+  font-size: 1.5rem;
+  color:var(--color-primary);
+}
+
+.logo{
+  height: 5%;
+  width: auto;
+  margin-right: 1rem;
+}
+
+/* Right-aligned profile */
+.profileLink {
+  margin-left: auto;
+  text-decoration: none;
+  font-size: 1.5rem;
+  color: var(--color-primary);
 }
