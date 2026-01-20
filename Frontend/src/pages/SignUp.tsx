@@ -1,11 +1,12 @@
 import { useState } from "react"
 import { useNavigate } from "react-router-dom"
 import { useAppStore } from "../store/useAppStore"
-import styles from "./Login.module.css"
+import styles from "./Signup.module.css"
 
-export default function Login() {
+export default function Signup() {
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
+  const [confirmPassword, setConfirmPassword] = useState("")
 
   const setSignedIn = useAppStore(state => state.setSignedIn)
   const navigate = useNavigate()
@@ -13,15 +14,23 @@ export default function Login() {
   function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault()
 
+    // Simple validation
+    if (password !== confirmPassword) {
+      alert("Passwords do not match!")
+      return
+    }
+
+    // TEMP: fake signup success
     console.log({ email, password })
 
+    // Update global state & redirect
     setSignedIn(true)
-    navigate("/find")
+    navigate("/profile")
   }
 
   return (
-    <div className={styles.loginContainer}>
-      <h1 className={styles.header}>Login</h1>
+    <div className={styles.signupContainer}>
+      <h1 className={styles.header}>Sign Up</h1>
 
       <form className={styles.form} onSubmit={handleSubmit}>
         <input
@@ -40,10 +49,16 @@ export default function Login() {
           required
         />
 
-        <button type="submit">Login</button>
-      </form>
+        <input
+          type="password"
+          placeholder="Confirm Password"
+          value={confirmPassword}
+          onChange={e => setConfirmPassword(e.target.value)}
+          required
+        />
 
-      <p>New to SubleasesInc? <a href="/signup">Sign up</a></p>
+        <button type="submit">Sign Up</button>
+      </form>
     </div>
   )
 }

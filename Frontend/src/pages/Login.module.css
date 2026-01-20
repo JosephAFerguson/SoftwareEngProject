@@ -1,1 +1,19 @@
 /* Login.module.css */
+.loginContainer {
+    width: 100%;
+    height: 100%;
+    justify-items: center;
+}
+
+.header {
+    color: var(--color-primary);
+    font-size: 3rem;
+}
+
+.form {
+    display: grid;
+    font-size:1.3rem;
+    gap: 1em;
+    width: 300px;
+    margin: 0 auto;
+}
