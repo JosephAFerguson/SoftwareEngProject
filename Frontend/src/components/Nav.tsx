@@ -1,13 +1,14 @@
 import { Link } from "react-router-dom"
+import styles from "./Nav.module.css"
 
 export default function Nav() {
   return (
-    <nav style={{ padding: "1rem", borderBottom: "1px solid #ccc" }}>
-      <Link to="/" style={{ marginRight: "1rem" }}>
+    <nav className={styles.nav}>
+      <Link to="/">
         Home
       </Link>
 
-      <Link to="/profile" style={{ marginRight: "1rem" }}>
+      <Link to="/profile">
         Profile
       </Link>
 

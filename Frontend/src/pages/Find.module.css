@@ -1,0 +1,6 @@
+/* Find.module.css */
+.findContainer {
+  padding: 2rem;
+  background-color: var(--color-background);
+  color: var(--color-secondary);
+}

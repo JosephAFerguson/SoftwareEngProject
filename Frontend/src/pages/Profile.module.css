@@ -1,0 +1,6 @@
+/* Profile.module.css */
+.profileContainer {
+  padding: 2rem;
+  background-color: var(--color-background);
+  color: var(--color-secondary);
+}
