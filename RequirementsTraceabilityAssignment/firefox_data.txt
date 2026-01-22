@@ -1,0 +1,5 @@
+NFR1 (Operational): The browser shall load pages within 2 seconds on a standard broadband connection and efficiently manage memory usage for multiple tabs.
+
+NFR2 (Usability): Users shall be able to navigate and interact with browser features intuitively, including bookmarks, tab management, and extensions, with minimal clicks and clear labeling.
+
+NFR3 (Security): The browser shall protect users from malicious websites and downloads, enforce secure HTTPS connections, and regularly update to mitigate vulnerabilities.
