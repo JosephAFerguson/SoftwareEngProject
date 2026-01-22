@@ -13,7 +13,8 @@ export default function Login() {
   function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault()
 
-    console.log({ email, password })
+    //TODO send to backend & validate
+
 
     setSignedIn(true)
     navigate("/find")

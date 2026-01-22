@@ -7,7 +7,7 @@ import Signup from "./pages/SignUp"
 
 function Layout() {
   const location = useLocation()
-  const hideNav = location.pathname === "/login"
+  const hideNav = location.pathname === "/login" || location.pathname === "/signup"
 
   return (
     <>

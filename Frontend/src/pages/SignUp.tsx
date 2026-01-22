@@ -14,14 +14,13 @@ export default function Signup() {
   function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault()
 
-    // Simple validation
+    // TODO: Implement real signup logic & validation
     if (password !== confirmPassword) {
       alert("Passwords do not match!")
       return
     }
 
-    // TEMP: fake signup success
-    console.log({ email, password })
+    //TODO send to backend
 
     // Update global state & redirect
     setSignedIn(true)

@@ -1,18 +1,13 @@
 .signupContainer {
-  max-width: 400px;
+  max-width: 30%;
   margin: 5rem auto;
   padding: 2rem;
-  border: 1px solid #ccc;
-  border-radius: 0.5rem;
-  background-color: var(--color-tertiary);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
 .header {
   text-align: center;
-  margin-bottom: 1.5rem;
-  font-size: 2rem;
-  color: #333;
+  font-size: 3rem;
+  color: var(--color-primary);
 }
 
 .form {
@@ -33,12 +28,12 @@ button {
   border: none;
   border-radius: 0.25rem;
   background-color: #333;
-  color: #fff;
+  color: var(--color-background);
   font-size: 1rem;
   cursor: pointer;
   transition: background-color 0.2s ease;
 }
 
 button:hover {
-  background-color: #555;
+  background-color: var(--color-secondary);
 }
