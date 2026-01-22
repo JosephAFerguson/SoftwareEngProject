@@ -1,5 +1,5 @@
 #any documentation
 *.docx
 *.pdf
+*.xlsx
 
-/RequirementsTraceabilityAssignment/
