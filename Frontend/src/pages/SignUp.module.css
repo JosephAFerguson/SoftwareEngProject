@@ -1,14 +1,13 @@
-/* Login.module.css */
-.loginContainer {
-    max-width: 30%;
-    margin: 5rem auto;
-    padding: 2rem;
+.signupContainer {
+  max-width: 30%;
+  margin: 5rem auto;
+  padding: 2rem;
 }
 
 .header {
-    text-align: center;
-    color: var(--color-primary);
-    font-size: 3rem;
+  text-align: center;
+  font-size: 3rem;
+  color: var(--color-primary);
 }
 
 .form {
@@ -37,8 +36,4 @@ button {
 
 button:hover {
   background-color: var(--color-secondary);
-}
-
-p{
-    text-align: center;
 }
