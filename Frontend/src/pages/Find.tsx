@@ -179,6 +179,7 @@ export default function Find() {
     } else {
       // Lock the card and expand it
       setLockedListingId(listing.id);
+      setFilterExpanded(false); // Hide filter when expanding card
       handleSelectListing(listing);
 
       // Scroll the expanded card into view
@@ -255,18 +256,26 @@ export default function Find() {
       {/* LISTINGS SECTION (Left Column) */}
       {/* ============================================================== */}
       <div className={styles.listingsContainer}>
-        {/* Filter panel */}
-        <div className={`${styles.listingsFilter} ${filterExpanded ? styles.filterExpanded : ""}`}>
+        {/* Filter panel (hidden when card is expanded) */}
+        {lockedListingId === null && (
+        <div className={`${styles.listingsFilter} ${filterExpanded ? styles.filterExpanded : ""}`}
+          onClick={!filterExpanded ? handleToggleFilter : undefined}
+        >
           {/* Filter header with toggle button */}
           <div className={styles.filterHeader}>
-            <button
-              className={styles.filterToggle}
-              onClick={handleToggleFilter}
-              title={filterExpanded ? "Close filters" : "Open filters"}
-            >
               <FiSearch size={24} />
               <span>Filters</span>
-            </button>
+              {filterExpanded && (
+                <FiMinimize2
+                  size={24}
+                  className={styles.filterMinimizeIcon}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setFilterExpanded(false);
+                  }}
+                  title="Close filters"
+                />
+              )}
           </div>
 
           {/* Filter options (shown when expanded) */}
@@ -313,6 +322,7 @@ export default function Find() {
                       className={styles.filterInput}
                     />
                   </div>
+                  {/* Add more filtering options*/}
                 </div>
               </div>
 
@@ -334,6 +344,7 @@ export default function Find() {
             </div>
           )}
         </div>
+        )}
 
         {/* Listings grid (hidden when filter is expanded) */}
         {!filterExpanded && (
@@ -360,6 +371,7 @@ export default function Find() {
                   <h3>{listing.title}</h3>
                   {lockedListingId === listing.id && (
                     <FiMinimize2
+                      size={24}
                       className={styles.minimizeIcon}
                       onClick={(e) => handleMinimize(e)}
                       title="Minimize"
