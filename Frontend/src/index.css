@@ -5,7 +5,7 @@
 
   color-scheme: light dark;
 
-  --color-primary: #0070f3;
+  --color-primary: #00418b;
   --color-secondary: #1c1c1e;
   --color-tertiary: #eaeaea;
   --color-background: #ffffff;
@@ -23,4 +23,29 @@ html, body {
   width: 100%;
   overflow-y: hidden;
   background-color: var(--color-background);
+}
+
+/* Firefox */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(120, 120, 120, 0.4) transparent;
+}
+
+/* WebKit browsers (Chrome, Edge, Safari) */
+*::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+*::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+*::-webkit-scrollbar-thumb {
+  background-color: rgba(120, 120, 120, 0.4);
+  border-radius: 999px;
+}
+
+*::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(120, 120, 120, 0.6);
 }
