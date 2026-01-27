@@ -17,7 +17,7 @@ export default function Login() {
 
 
     setSignedIn(true)
-    navigate("/find")
+    navigate("/")
   }
 
   return (
