@@ -2,10 +2,11 @@
   font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
   font-weight: 400;
+  font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
 
   color-scheme: light dark;
 
-  --color-primary: #00418b;
+  --color-primary: #004a9e;
   --color-secondary: #1c1c1e;
   --color-tertiary: #eaeaea;
   --color-background: #ffffff;
