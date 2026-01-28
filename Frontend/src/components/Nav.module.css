@@ -19,6 +19,12 @@
   color:var(--color-primary);
 }
 
+.logoLink {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
 .logo{
   height: 5%;
   width: auto;
@@ -27,8 +33,11 @@
 
 /* Right-aligned profile */
 .profileLink {
-  margin-left: auto;
   text-decoration: none;
   font-size: 1.5rem;
   color: var(--color-primary);
+}
+
+.logoContainer {
+  color: black;
 }

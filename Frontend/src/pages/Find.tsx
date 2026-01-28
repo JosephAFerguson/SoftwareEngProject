@@ -257,102 +257,112 @@ export default function Find() {
       {/* ============================================================== */}
       <div className={styles.listingsContainer}>
         {/* Filter panel (hidden when card is expanded) */}
+        {/* ============================================================== */}
         {lockedListingId === null && (
-        <div className={`${styles.listingsFilter} ${filterExpanded ? styles.filterExpanded : ""}`}
-          onClick={!filterExpanded ? handleToggleFilter : undefined}
-        >
-          {/* Filter header with toggle button */}
-          <div className={styles.filterHeader}>
-              <FiSearch size={24} />
-              <span>Filters</span>
-              {filterExpanded && (
-                <FiMinimize2
-                  size={24}
-                  className={styles.filterMinimizeIcon}
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    setFilterExpanded(false);
-                  }}
-                  title="Close filters"
-                />
-              )}
-          </div>
-
-          {/* Filter options (shown when expanded) */}
-          {filterExpanded && (
-            <div className={styles.filterOptions}>
-              {/* Search by keyword */}
-              <div className={styles.filterGroup}>
-                <label htmlFor="search-input">Search</label>
-                <input
-                  id="search-input"
-                  type="text"
-                  placeholder="Search listings..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  className={styles.filterInput}
-                />
-              </div>
-
-              {/* Price range filter */}
-              <div className={styles.filterGroup}>
-                <label>Price Range</label>
-                <div className={styles.priceRangeContainer}>
-                  <div className={styles.priceInput}>
-                    <label htmlFor="min-price">Min</label>
-                    <input
-                      id="min-price"
-                      type="number"
-                      min="0"
-                      max={maxPrice}
-                      value={minPrice}
-                      onChange={(e) => setMinPrice(Number(e.target.value))}
-                      className={styles.filterInput}
-                    />
-                  </div>
-                  <span className={styles.priceSeparator}>-</span>
-                  <div className={styles.priceInput}>
-                    <label htmlFor="max-price">Max</label>
-                    <input
-                      id="max-price"
-                      type="number"
-                      min={minPrice}
-                      value={maxPrice}
-                      onChange={(e) => setMaxPrice(Number(e.target.value))}
-                      className={styles.filterInput}
-                    />
-                  </div>
-                  {/* Add more filtering options*/}
+          <div className={styles.filterSlot}>
+            <div
+              className={`${styles.listingsFilter} ${
+                filterExpanded ? styles.filterExpanded : ""
+              }`}
+              onClick={!filterExpanded ? handleToggleFilter : undefined}
+            >
+              {/* Filter header */}
+              <div className={styles.filterHeader}>
+                <div className={styles.filterHeaderLeft}>
+                  <FiSearch size={20} />
+                  <span>Filters</span>
                 </div>
+
+                {filterExpanded && (
+                  <FiMinimize2
+                    size={20}
+                    className={styles.filterMinimizeIcon}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setFilterExpanded(false);
+                    }}
+                    title="Close filters"
+                  />
+                )}
               </div>
 
-              {/* Filter actions */}
-              <div className={styles.filterActions}>
-                <button
-                  className={styles.resetButton}
-                  onClick={handleResetFilters}
-                >
-                  Reset
-                </button>
-                <button
-                  className={styles.applyButton}
-                  onClick={handleApplyFilters}
-                >
-                  Apply Filters
-                </button>
-              </div>
+              {/* Expanded filter options */}
+              {filterExpanded && (
+                <div className={styles.filterOptions}>
+                  {/* Search */}
+                  <div className={styles.filterGroup}>
+                    <label htmlFor="search-input">Search</label>
+                    <input
+                      id="search-input"
+                      type="text"
+                      placeholder="Search listings..."
+                      value={searchQuery}
+                      onChange={(e) => setSearchQuery(e.target.value)}
+                      className={styles.filterInput}
+                    />
+                  </div>
+
+                  {/* Price range */}
+                  <div className={styles.filterGroup}>
+                    <label>Price Range</label>
+                    <div className={styles.priceRangeContainer}>
+                      <div className={styles.priceInput}>
+                        <label htmlFor="min-price">Min</label>
+                        <input
+                          id="min-price"
+                          type="number"
+                          min="0"
+                          max={maxPrice}
+                          value={minPrice}
+                          onChange={(e) => setMinPrice(Number(e.target.value))}
+                          className={styles.filterInput}
+                        />
+                      </div>
+
+                      <span className={styles.priceSeparator}>-</span>
+
+                      <div className={styles.priceInput}>
+                        <label htmlFor="max-price">Max</label>
+                        <input
+                          id="max-price"
+                          type="number"
+                          min={minPrice}
+                          value={maxPrice}
+                          onChange={(e) => setMaxPrice(Number(e.target.value))}
+                          className={styles.filterInput}
+                        />
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Actions */}
+                  <div className={styles.filterActions}>
+                    <button
+                      className={styles.resetButton}
+                      onClick={handleResetFilters}
+                    >
+                      Reset
+                    </button>
+                    <button
+                      className={styles.applyButton}
+                      onClick={handleApplyFilters}
+                    >
+                      Apply Filters
+                    </button>
+                  </div>
+                </div>
+              )}
             </div>
-          )}
-        </div>
+          </div>
         )}
 
+
         {/* Listings grid (hidden when filter is expanded) */}
-        {!filterExpanded && (
-        <div
-          className={`${styles.listingsGrid} ${
-            lockedListingId !== null ? styles.hasExpanded : ""
-          }`}
-        >
+          <div
+            className={`${styles.listingsGrid} ${
+              lockedListingId !== null ? styles.hasExpanded : ""
+            }`}
+          >
           {/* Map through listings and render cards */}
           {listings.map((listing) => (
             <div
@@ -401,7 +411,6 @@ export default function Find() {
             </div>
           ))}
         </div>
-        )}
       </div>
 
       {/* ============================================================== */}
