@@ -3,7 +3,7 @@
   display: flex;
   align-items: center;
   background: var(--color-background);
-  border-bottom: 2px solid black;
+  border-bottom: 1px solid black;
 }
 
 /* Container for center links */
@@ -19,6 +19,12 @@
   color:var(--color-primary);
 }
 
+.logoLink {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
 .logo{
   height: 5%;
   width: auto;
@@ -27,8 +33,11 @@
 
 /* Right-aligned profile */
 .profileLink {
-  margin-left: auto;
   text-decoration: none;
   font-size: 1.5rem;
   color: var(--color-primary);
+}
+
+.logoContainer {
+  color: black;
 }

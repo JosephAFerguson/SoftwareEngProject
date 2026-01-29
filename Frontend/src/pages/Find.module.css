@@ -1,6 +1,376 @@
-/* Find.module.css */
+/* ========================================================================== */
+/* LAYOUT */
+/* ========================================================================== */
+
+/**
+ * Main container for the Find page
+ * Uses CSS Grid with 60/40 split: listings on left, map on right
+ */
 .findContainer {
+  color: var(--color-secondary);
+  display: grid;
+  height: 85vh;
   padding: 2rem;
+  grid-template-columns: 60% 40%;
+  gap: 1rem;
+}
+
+/**
+ * Container for all listing-related elements
+ * Uses flexbox for vertical layout of filter and listings grid
+ */
+.listingsContainer {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  position: relative;
+}
+
+/* ========================================================================== */
+/* FILTER PANEL */
+/* ========================================================================== */
+.filterSlot {
+  position: relative;
+  height: 5rem; /* collapsed filter height */
+  z-index: 10;
+}
+
+/**
+ * Filter panel wrapper
+ * Collapsed by default with small max-height, expands when filterExpanded is applied
+ */
+.listingsFilter {
+  border: 1px solid var(--color-secondary);
+  border-radius: 5rem;
+}
+
+.listingsFilter {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: calc(100% - 3.75rem);
+  background-color: var(--color-background);
+  border-radius: 0.75rem;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
+  padding: 0.75rem 1.25rem;
+
+  overflow: hidden;
+  transition: max-height 0.35s ease;
+  cursor: pointer;
+}
+
+.listingsFilter:hover {
+  cursor: pointer;
+}
+
+/**
+ * Expanded filter state
+ * Increases max-height to show all filter options
+ */
+.filterExpanded {
+  cursor: auto;
+  z-index: 20;
+}
+
+.filterExpanded:hover {
+  cursor: auto;
+}
+
+/**
+ * Filter header containing search icon and filters text
+ */
+.filterHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.filterHeaderLeft {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 600;
+}
+
+.filterExpanded .filterHeader {
+  justify-content: space-between;
+}
+
+/**
+ * Filter toggle button (search icon + text)
+ */
+.filterToggle {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--color-secondary);
+  font-size: 1rem;
+  font-weight: 500;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.filterToggle:hover {
+  background-color: var(--color-accent);
+  color: var(--color-background);
+}
+
+/**
+ * Minimize icon for expanded filter
+ * Only visible when filter is expanded
+ */
+.filterMinimizeIcon {
+  cursor: pointer;
+  transition: transform 0.15s ease, opacity 0.15s ease;
+}
+
+.filterMinimizeIcon:hover {
+  transform: scale(1.1);
+  opacity: 0.75;
+}
+
+/**
+ * Container for expanded filter options
+ * Only displayed when filterExpanded class is active
+ */
+.filterOptions {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+/**
+ * Individual filter group (search, price range, etc.)
+ */
+.filterGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.filterGroup label {
+  font-weight: 600;
+  color: var(--color-secondary);
+  font-size: 0.9rem;
+}
+
+/**
+ * Filter input field styling
+ */
+.filterInput {
+  padding: 0.75rem;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 0.5rem;
   background-color: var(--color-background);
   color: var(--color-secondary);
+  font-size: 0.95rem;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
+
+.filterInput:focus {
+  outline: none;
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.05);
+}
+
+/**
+ * Price range filter layout
+ * Two input fields (min/max) side by side with a separator
+ */
+.priceRangeContainer {
+  display: flex;
+  align-items: flex-end;
+  gap: 0.75rem;
+}
+
+.priceInput {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  flex: 1;
+}
+
+.priceInput label {
+  font-size: 0.85rem;
+  font-weight: 500;
+}
+
+.priceSeparator {
+  margin-bottom: 0.75rem;
+  font-weight: bold;
+}
+
+/**
+ * Filter action buttons container
+ * Aligned to the right
+ */
+.filterActions {
+  display: flex;
+  gap: 1rem;
+  justify-content: flex-end;
+  margin-top: 1rem;
+}
+
+/**
+ * Reset and Apply filter buttons
+ */
+.resetButton,
+.applyButton {
+  color: var(--color-secondary);
+  background-color: var(--color-background);
+  padding: 0.75rem 1.25rem;
+  border: none;
+  border-radius: 0.5rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 0.95rem;
+}
+
+.resetButton:hover,
+.applyButton:hover {
+  background-color: var(--color-tertiary);
+}
+
+/* ========================================================================== */
+/* LISTINGS GRID */
+/* ========================================================================== */
+
+/**
+ * Grid layout for listing cards
+ * 2 columns, scrollable vertically
+ */
+.listingsGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-auto-rows: min-content;
+  gap: 16px;
+  flex: 1;
+  overflow-y: auto;
+  padding-right: 1rem;
+  min-height: 0;
+}
+
+/**
+ * Individual listing card
+ * Clickable container for listing information
+ */
+.listingCard {
+  background-color: var(--color-background);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  border-radius: 0.5rem;
+  padding: 0.5rem;
+  cursor: pointer;
+}
+
+/**
+ * Expanded listing card state
+ * Takes up full grid space and hides other cards
+ */
+.expanded {
+  grid-column: 1 / -1;
+  grid-row: 1 / -1;
+  z-index: 2;
+  height: 100%;
+  box-shadow: none;
+  cursor: auto;
+}
+
+.listingsGrid:has(.expanded) .listingCard:not(.expanded) {
+  display: none;
+}
+
+.hasExpanded .listingCard:not(.expanded) {
+  display: none;
+}
+
+/**
+ * Card content when expanded
+ */
+.expanded .cardContent {
+  height: 100%;
+  justify-content: flex-start;
+}
+
+/**
+ * Header of card content (title and minimize icon)
+ */
+.cardContentHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/**
+ * Minimize icon inside card header
+ */
+.minimizeIcon {
+  cursor: pointer;
+}
+
+.minimizeIcon:hover {
+  transform: scale(1.1);
+  opacity: 0.75;
+}
+
+/**
+ * Listing image styling
+ */
+.listingImage {
+  width: 100%;
+  height: 140px;
+  object-fit: cover;
+  border-radius: 6px;
+}
+
+.expanded .listingImage {
+  height: 320px;
+}
+
+/**
+ * Active/selected listing card styling
+ */
+.active {
+  border-color: var(--color-accent);
+}
+
+/**
+ * Price text styling
+ */
+.price {
+  font-weight: bold;
+}
+
+/**
+ * Card heading styling
+ */
+.listingCard h3 {
+  margin: 0 0 0.25rem 0;
+}
+
+/* ========================================================================== */
+/* MAP */
+/* ========================================================================== */
+
+/**
+ * Map container on the right side
+ * Displays Google Map with listing markers
+ */
+.mapContainer {
+  height: 100%;
+  min-height: 400px;
+  width: 100%;
+  border: 2px solid var(--color-accent);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+

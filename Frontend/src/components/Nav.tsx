@@ -1,7 +1,6 @@
 import { Link } from "react-router-dom"
 import { useAppStore } from "../store/useAppStore"
 import styles from "./Nav.module.css"
-import logo from  "../../public/logo.svg"
 
 export default function Nav() {
   const {signedIn} = useAppStore()
@@ -13,14 +12,14 @@ export default function Nav() {
           Find
         </Link>
 
+        <Link className={`${styles.link} ${styles.logoLink}`} to="/">
+          SubleaseInc.
+        </Link>
+
+
         <Link className={styles.link} to="/host">
           Host
         </Link>
-
-        <img className={styles.logo}
-          src={logo}
-          alt="App Logo"
-        />
       </div>
 
         {signedIn ? (
