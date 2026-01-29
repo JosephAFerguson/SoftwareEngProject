@@ -2,6 +2,7 @@ package middleware
 
 import (
 	"github.com/gofiber/fiber/v2"
+	//"github.com/JosephAFerguson/SoftwareEngProject/internals/models"
 )
 
 func UserExistsMiddleware(c *fiber.Ctx) error {
