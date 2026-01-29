@@ -4,7 +4,7 @@
 
 import { useRef, useState } from "react";
 import styles from './Find.module.css';
-import { GoogleMap, Marker, useJsApiLoader } from "@react-google-maps/api";
+import { GoogleMap, Marker } from "@react-google-maps/api";
 import { FiMinimize2 , FiSearch} from "react-icons/fi";
 
 import pic1 from "../../public/pic1.png";
@@ -124,9 +124,6 @@ const defaultCenter = {
  * - Minimize icon to collapse expanded cards
  */
 export default function Find() {
-  // Get API key from environment variables
-  const apiKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
-
   // ========================================================================
   // STATE
   // ========================================================================
@@ -228,23 +225,7 @@ export default function Find() {
   // API CALLS
   // ========================================================================
 
-  /**
-   * Fetches listing data from the backend API
-   * TODO: Implement and integrate with real data
-   */
-  const grabListingData = async () => {
-    const res = await fetch("http://localhost:3000/api/v1/listings");
-    const data = await res.json();
-    console.log(data);
-  };
-
-  // ========================================================================
-  // GOOGLE MAPS
-  // ========================================================================
-
-  const { isLoaded } = useJsApiLoader({
-    googleMapsApiKey: apiKey,
-  });
+  // TODO: Implement and integrate with real data from backend API
 
   // ========================================================================
   // RENDER
@@ -417,35 +398,33 @@ export default function Find() {
       {/* MAP SECTION (Right Column) */}
       {/* ============================================================== */}
       <div className={styles.mapContainer}>
-        {isLoaded && (
-          <GoogleMap
-            mapContainerStyle={containerStyle}
-            center={
-              selectedListing
-                ? { lat: selectedListing.lat, lng: selectedListing.lng }
-                : defaultCenter
-            }
-            zoom={zoom}
-            onLoad={(map) => {
-              mapRef.current = map;
-            }}
-          >
-            {/* Render markers for each listing */}
-            {listings.map((listing) => (
-              <Marker
-                key={listing.id}
-                position={{ lat: listing.lat, lng: listing.lng }}
-                title={listing.title}
-                icon={
-                  selectedListing?.id === listing.id
-                    ? "http://maps.google.com/mapfiles/ms/icons/blue-dot.png"
-                    : undefined
-                }
-                onClick={() => handleClickListing(listing)}
-              />
-            ))}
-          </GoogleMap>
-        )}
+        <GoogleMap
+          mapContainerStyle={containerStyle}
+          center={
+            selectedListing
+              ? { lat: selectedListing.lat, lng: selectedListing.lng }
+              : defaultCenter
+          }
+          zoom={zoom}
+          onLoad={(map) => {
+            mapRef.current = map;
+          }}
+        >
+          {/* Render markers for each listing */}
+          {listings.map((listing) => (
+            <Marker
+              key={listing.id}
+              position={{ lat: listing.lat, lng: listing.lng }}
+              title={listing.title}
+              icon={
+                selectedListing?.id === listing.id
+                  ? "http://maps.google.com/mapfiles/ms/icons/blue-dot.png"
+                  : undefined
+              }
+              onClick={() => handleClickListing(listing)}
+            />
+          ))}
+        </GoogleMap>
       </div>
     </div>
   );

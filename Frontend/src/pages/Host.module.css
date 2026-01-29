@@ -1,1 +1,210 @@
-/* Host.module.css */
+.hostContainer {
+  color: var(--color-secondary);
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+  padding: 2rem;
+  height: 85vh;
+}
+
+/* ================= LEFT COLUMN ================= */
+.hostInputs {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.hostInputs h2 {
+  margin: 0;
+  font-size: 1.75rem;
+}
+
+.form {
+  background-color: var(--color-background);
+  padding: 2rem;
+  border-radius: 0.75rem;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
+
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.formGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.formGroup label {
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.formGroup input,
+.formGroup textarea {
+  padding: 0.75rem;
+  border-radius: 0.5rem;
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  font-size: 0.95rem;
+  background-color: var(--color-background);
+  color: var(--color-secondary);
+}
+
+gmp-place-autocomplete-element {
+  display: block;
+  width: 100%;
+}
+
+.formGroup gmp-place-autocomplete-element {
+  width: 100%;
+}
+
+gmp-place-autocomplete-element::part(input) {
+  padding: 0.75rem;
+  border-radius: 0.5rem;
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  font-size: 0.95rem;
+  background-color: var(--color-background);
+  color: var(--color-secondary);
+  width: 100%;
+}
+
+.formGroup input:focus,
+.formGroup textarea:focus {
+  outline: none;
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.05);
+}
+
+.submitButton {
+  margin-top: 0.5rem;
+  padding: 0.9rem;
+  font-size: 1rem;
+  font-weight: 600;
+  border-radius: 0.6rem;
+  border: none;
+  cursor: pointer;
+
+  background-color: var(--color-accent);
+  color: var(--color-background);
+  transition: background-color 0.2s ease;
+}
+
+.submitButton:hover {
+  background-color: var(--color-tertiary);
+}
+
+/* ================= RIGHT COLUMN ================= */
+.hostPictureUpload {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  height: 100%;
+}
+
+.mapContainer {
+  flex: 1;
+  border-radius: 0.75rem;
+  overflow: hidden;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
+}
+
+.map {
+  width: 100%;
+  height: 100%;
+}
+
+.uploadBox {
+  flex: 1;
+  border: 2px dashed rgba(0, 0, 0, 0.25);
+  border-radius: 0.75rem;
+  background-color: var(--color-background);
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+
+  color: var(--color-secondary);
+  text-align: center;
+  cursor: pointer;
+  transition: border-color 0.2s ease, background-color 0.2s ease;
+  overflow-y: auto;
+  padding: 1rem;
+}
+
+.uploadBox:hover {
+  border-color: var(--color-accent);
+  background-color: rgba(0, 0, 0, 0.02);
+}
+
+.uploadBox p {
+  font-weight: 600;
+  margin: 0;
+  flex-shrink: 0;
+}
+
+.uploadBox span {
+  font-size: 0.85rem;
+  opacity: 0.7;
+  flex-shrink: 0;
+}
+
+.uploadBox.hasImages {
+  justify-content: flex-start;
+  align-items: flex-start;
+}
+
+.previewContainer {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 1rem;
+  width: 100%;
+}
+
+.photoWrapper {
+  position: relative;
+  width: 100%;
+  padding-bottom: 100%;
+}
+
+.previewImg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 0.5rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.deleteButton {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 50%;
+  border: none;
+  background-color: rgba(255, 0, 0, 0.8);
+  color: white;
+  font-size: 1.5rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.2s ease;
+  z-index: 10;
+}
+
+.deleteButton:hover {
+  background-color: rgba(255, 0, 0, 1);
+}
+
+.hiddenFileInput {
+  display: none;
+}
+
