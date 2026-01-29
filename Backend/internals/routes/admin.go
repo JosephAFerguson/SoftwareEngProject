@@ -1,12 +1,13 @@
 package routes
 
-import "github.com/gofiber/fiber/v2"
+import (
+    "github.com/gofiber/fiber/v2"
+	"github.com/JosephAFerguson/SoftwareEngProject/internals/handlers"
+)
 
-func AdminRoutes(router fiber.Router) {
-	//Eventually add auth for Admin accts
+func AdminRoutes(router fiber.Router, adminHandler *handlers.AdminHandler) {
+    adminGroup := router.Group("/admin")
 
-    router.Get("/health", func(c *fiber.Ctx) error {
-        return c.SendString("ok")
-    })
+    adminGroup.Post("/health", adminHandler.Health)
 }
 
