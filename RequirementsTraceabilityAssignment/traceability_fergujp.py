@@ -15,8 +15,17 @@ from sklearn.model_selection import train_test_split
 # 1. FILE PATHS
 # ============================================================
 
-dataPath = "./requirements_data.txt"
-answerPath = "./requirements_answers.txt"
+DATAPATH = "./requirements_data.txt"
+ANSWERPATH = "./requirements_answers.txt"
+
+FIREFOXDATAPATH = "./firefox_data.txt"
+FIREFOXANSWERPATH = "./firefox_data_answers.txt"
+
+# FIREFOX DATA WAS TAKEN FROM THE FOLLOWING LINKS:
+# NFRs: https://wiki.mozilla.org/Security/Reviews/Firefox_4_Non-Functional_Requirements
+# https://www.firefox.com/en-US/firefox/147.0/releasenotes/
+# https://www.firefox.com/en-US/firefox/146.0/releasenotes/
+# https://www.firefox.com/en-US/firefox/145.0/releasenotes/
 
 
 # ============================================================
@@ -26,36 +35,37 @@ answerPath = "./requirements_answers.txt"
 #    - FRs stored as list: [(FR_id, text), ...]
 # ============================================================
 
-nfrs = {}
-frs = []
+def load_requirements(file_path):
+    nfrs = {}
+    frs = []
 
-print("Loading requirements data...")
+    print(f"Loading requirements data from {file_path}...")
 
-with open(dataPath, "r", encoding="utf-8") as f:
-    for line_num, line in enumerate(f, 1):
-        line = line.strip()
+    with open(file_path, "r", encoding="utf-8") as f:
+        for line_num, line in enumerate(f, 1):
+            line = line.strip()
 
-        # Skip empty lines
-        if not line:
-            continue
+            # Skip empty lines
+            if not line:
+                continue
 
-        # Enforce expected "KEY: value" format
-        if ":" not in line:
-            raise ValueError(f"Missing ':' at line {line_num}: {line}")
+            # Enforce expected "KEY: value" format
+            if ":" not in line:
+                raise ValueError(f"Missing ':' at line {line_num}: {line}")
 
-        key, value = line.split(":", 1)
-        key = key.strip()
-        value = value.strip()
+            key, value = line.split(":", 1)
+            key = key.strip()
+            value = value.strip()
 
-        # Separate NFRs and FRs based on prefix
-        if key.upper().startswith("NFR"):
-            nfrs[key] = value
-        elif key.upper().startswith("FR"):
-            frs.append((key, value))
+            # Separate NFRs and FRs based on prefix
+            if key.upper().startswith("NFR"):
+                nfrs[key] = value
+            elif key.upper().startswith("FR"):
+                frs.append((key, value))
 
-print(f"Loaded {len(nfrs)} NFRs")
-print(f"Loaded {len(frs)} FRs\n")
-
+    print(f"Loaded {len(nfrs)} NFRs")
+    print(f"Loaded {len(frs)} FRs\n")
+    return nfrs, frs
 
 # ============================================================
 # 3. LOAD ANSWER LABELS
@@ -63,26 +73,27 @@ print(f"Loaded {len(frs)} FRs\n")
 #    - Stored as dict: {FR_id: np.array([o, u, s])}
 # ============================================================
 
-answers = {}
+def load_answers(file_path):
+    answers = {}
 
-print("Loading answer labels...")
+    print(f"Loading answer labels from {file_path}...")
 
-with open(answerPath, "r", encoding="utf-8") as f:
-    for line_num, line in enumerate(f, 1):
-        line = line.strip()
+    with open(file_path, "r", encoding="utf-8") as f:
+        for line_num, line in enumerate(f, 1):
+            line = line.strip()
 
-        if not line:
-            continue
+            if not line:
+                continue
 
-        parts = [p.strip() for p in line.split(",")]
+            parts = [p.strip() for p in line.split(",")]
 
-        fr_id = parts[0]
-        labels = np.array([int(x) for x in parts[1:]])
+            fr_id = parts[0]
+            labels = np.array([int(x) for x in parts[1:]])
 
-        answers[fr_id] = labels
+            answers[fr_id] = labels
 
-print(f"Loaded labels for {len(answers)} FRs\n")
-
+    print(f"Loaded labels for {len(answers)} FRs\n")
+    return answers
 
 # ============================================================
 # 4. NORMALIZE NFR ORDER
@@ -113,7 +124,6 @@ def normalize_nfrs(nfrs):
 
     print()
     return ordered_texts
-
 
 # ============================================================
 # 5. TF-IDF SIMILARITY COMPUTATION
@@ -180,6 +190,12 @@ def train_svm(frs, answers):
 
     return model, vectorizer
 
+# ============================================================
+# 7. EMBEDDING SIMILARITY COMPUTATION
+#    - Vectorizes FRs and NFRs using Sentence-BERT
+#    - Computes cosine similarity between each FR and each NFR
+# ============================================================
+
 def embedding_similarity(frs, nfrs):
     """
     Computes semantic similarity between FRs and NFRs
@@ -215,7 +231,7 @@ def embedding_similarity(frs, nfrs):
     return similarities
 
 # ============================================================
-# 6. MULTI-LABEL PREDICTION VIA THRESHOLDS
+# 7. MULTI-LABEL PREDICTION VIA THRESHOLDS
 # ============================================================
 
 def predict_labels(similarities, thresholds):
@@ -231,9 +247,8 @@ def predict_labels(similarities, thresholds):
     print()
     return preds
 
-
 # ============================================================
-# 7. EVALUATION
+# 8. EVALUATION
 # ============================================================
 
 def evaluate(preds, frs, answers):
@@ -254,61 +269,55 @@ def evaluate(preds, frs, answers):
         )
     )
 
+# ============================================================
+# 9. RUN SCRIPTS
+# ============================================================
+def run_option1(filepath, answerpath):
+    nfrs, frs = load_requirements(filepath)
+    answers = load_answers(answerpath)
+
+    sim = tfidf_similarity(frs, nfrs)
+
+    THRESHOLDS_TFIDF = [0.1, 0.1, 0.1]
+
+    preds = predict_labels(sim, thresholds=THRESHOLDS_TFIDF)
+
+    evaluate(preds, frs, answers)
+
+def run_option2(filepath, answerpath):
+    nfrs, frs = load_requirements(filepath)
+    answers = load_answers(answerpath)
+
+    sim = embedding_similarity(frs, nfrs)
+
+    THRESHOLDS_EMBEDDING = [0.3, 0.3, 0.3]
+
+    preds = predict_labels(sim, thresholds=THRESHOLDS_EMBEDDING)
+
+    evaluate(preds, frs, answers)
+
+def run_option3(filepath, answerpath):
+    nfrs, frs = load_requirements(filepath)
+    answers = load_answers(answerpath)
+
+    model, vectorizer = train_svm(frs, answers)
+
+    texts = [text for _, text in frs]
+    X = vectorizer.transform(texts)
+
+    preds = model.predict(X)
+
+    evaluate(preds, frs, answers)
 
 # ============================================================
-# 8. RUN PIPELINE
+# 9. RUN PIPELINE
 # ============================================================
-"""
-sim = tfidf_similarity(frs, nfrs)
+if __name__ == "__main__":
+    run_option1(DATAPATH, ANSWERPATH)
+    run_option2(DATAPATH, ANSWERPATH)
+    run_option3(DATAPATH, ANSWERPATH)
 
-for i, name in enumerate(["operational", "usability", "security"]):
-    col = sim[:, i]
-    print(f"\n{name.upper()} similarity distribution:")
-    print("  min:", col.min())
-    print("  25%:", np.percentile(col, 25))
-    print("  50%:", np.percentile(col, 50))
-    print("  75%:", np.percentile(col, 75))
-    print("  max:", col.max())
-
-THRESHOLDS_EMBEDDING = [0.39, 0.22, 0.44]
-THRESHOLDS_TFIDF = [0.01, 0.005, 0.11]
-
-preds = predict_labels(sim, thresholds=THRESHOLDS_TFIDF)
-
-print(preds)
-
-
-evaluate(preds, frs, answers)
-"""
-
-# FR texts and labels
-texts = [text for _, text in frs]
-y = np.array([answers[fr_id] for fr_id, _ in frs])
-
-# Split into train/test (e.g., 80/20)
-X_train_texts, X_test_texts, y_train, y_test = train_test_split(
-    texts, y, test_size=0.2, random_state=42
-)
-
-# Fit TF-IDF
-vectorizer = TfidfVectorizer(stop_words="english")
-X_train = vectorizer.fit_transform(X_train_texts)
-X_test = vectorizer.transform(X_test_texts)
-
-# Train SVM
-svm_model = OneVsRestClassifier(LinearSVC())
-svm_model.fit(X_train, y_train)
-
-# Predict on unseen test FRs
-preds_svm = svm_model.predict(X_test)
-
-# Evaluate
-print("True positive counts per label:", y_test.sum(axis=0))
-print("Predicted positive counts per label:", preds_svm.sum(axis=0))
-
-print(classification_report(
-    y_test, preds_svm,
-    target_names=["operational", "usability", "security"],
-    zero_division=0
-))
+    run_option1(FIREFOXDATAPATH, FIREFOXANSWERPATH)
+    run_option2(FIREFOXDATAPATH, FIREFOXANSWERPATH)
+    run_option3(FIREFOXDATAPATH, FIREFOXANSWERPATH)
 
