@@ -278,6 +278,8 @@ def run_option1(filepath, answerpath):
 
     sim = tfidf_similarity(frs, nfrs)
 
+    sort_similarities(frs, sim)
+
     THRESHOLDS_TFIDF = [0.1, 0.1, 0.1]
 
     preds = predict_labels(sim, thresholds=THRESHOLDS_TFIDF)
@@ -289,6 +291,8 @@ def run_option2(filepath, answerpath):
     answers = load_answers(answerpath)
 
     sim = embedding_similarity(frs, nfrs)
+
+    sort_similarities(frs, sim)
 
     THRESHOLDS_EMBEDDING = [0.3, 0.3, 0.3]
 
@@ -310,7 +314,64 @@ def run_option3(filepath, answerpath):
     evaluate(preds, frs, answers)
 
 # ============================================================
-# 9. RUN PIPELINE
+# 10. OPTIONAL MERGE SORTING OF FRs BASED ON SIMILARITY SCORES
+# ============================================================
+def sort_similarities(frs, similarities):
+    """
+    Sorts FRs based on max similarity to any NFR
+    TODO - compared to each NFR separately
+    """
+
+    fr_sim_pairs = [(fr_id, max(similarities[i])) for i, (fr_id, _) in enumerate(frs)]
+
+    # Use manual merge sort instead of sorted()
+    sorted_pairs = merge_sort(fr_sim_pairs)
+
+    # TODO - output as text with the actual FR texts
+    with open("sorted_frs.txt", "w") as f:
+        for fr_id, sim in sorted_pairs:
+            f.write(f"{fr_id}: {sim}\n")
+
+    return sorted_pairs
+
+def merge_sort(fr_sim_pairs):
+    if len(fr_sim_pairs) <= 1:
+        return fr_sim_pairs
+
+    mid = len(fr_sim_pairs) // 2
+    left = merge_sort(fr_sim_pairs[:mid])
+    right = merge_sort(fr_sim_pairs[mid:])
+
+    return merge(left, right)
+
+
+def merge(left, right):
+    result = []
+    i = 0
+    j = 0
+
+    # Descending order by similarity (index 1)
+    while i < len(left) and j < len(right):
+        if left[i][1] >= right[j][1]:
+            result.append(left[i])
+            i += 1
+        else:
+            result.append(right[j])
+            j += 1
+
+    while i < len(left):
+        result.append(left[i])
+        i += 1
+
+    while j < len(right):
+        result.append(right[j])
+        j += 1
+
+    return result
+
+
+# ============================================================
+# 11. RUN PIPELINE
 # ============================================================
 if __name__ == "__main__":
     run_option1(DATAPATH, ANSWERPATH)
