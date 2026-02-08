@@ -1,0 +1,60 @@
+FR1: improved video playback performance system amd gpus enabling zero copy playback hardware decoded video supported bringing parity intel nvidia gpus
+FR2: firefox support safe browsing protocol migrating safe browsing local list mode safe browsing protocol
+FR3: user enhanced tracking protection etp set strict local network access restriction enabled default firefox require user explicitly allow public website access local network resource
+FR4: address autofill enabled user switzerland
+FR5: webgpu support enabled device apple silicon processor supported macos version
+FR6: firefox allows customize keyboard shortcut replace hard type hard remember hotkeys eliminate conflict software create preferred set access experimental new feature typing keyboard address bar please share feedback mozilla connect
+FR7: firefox support freedesktop org xdg base directory specification
+FR8: picture picture player window optionally opened automatically video playing tab tab go background special thanks volunteer daniele ferla contributing feature
+FR9: window user automatically protect password bookmark turning backup firefox browsing data saved daily device encrypted password set fresh install firefox operating system new device current one restore backup pick right left feature currently available window device coming operating system soon
+FR10: fixed issue prevented window user selecting tab cursor top screen firefox window maximized
+FR11: fixed bug made http request containing non utf header value time fall back http
+FR12: draggable button dragged initiated button
+FR13: linux gnome mutter user window rendering surface size updated match actual pixel grid firefox delivers sharp rendering fractionally scaled display regardless actual window size
+FR14: various security fix
+FR15: firefox us quality value value accept language header major browser second language preference sent instead subsequent language preference decreasing minimum change fix compatibility issue server incorrectly rejected request lower quality value
+FR16: macos user dedicated gpu process default includes webgpu webgl firefox webrender feature enabled fatal error graphic code longer crash browser instead transparently restart gpu process
+FR17: view transition view transition pseudo element appear element panel associated animation appear animation panel
+FR18: anchor positioning element valid anchor name given anchor badge element view position try cs rule displayed cs rule panel element using position try fallback selected
+FR19: json viewer button import resource firefox profiler get breakdown size
+FR20: pseudo element selector added edited cs rule panel
+FR21: added support navigation api api provides ability initiate intercept manage browser navigation action successor previous web platform feature history api window location solves shortcoming
+FR22: unicode icu library updated release bringing support unicode new locale
+FR23: module service worker supported aligning firefox major browser improving compatibility modern web apps
+FR24: support cs module script added allowing stylesheets imported using javascript module system import attribute
+FR25: cs counter quote property supported marker pseudo element
+FR26: compressionstream decompressionstream support brotli format
+FR27: firefox support active view transition type selector associated view transition api change
+FR28: firefox expose view transition currently active document via document activeviewtransition property
+FR29: support cs anchor positioning added enabling tethering element anchor positioned element size position set relative anchor element bound
+FR30: firefox support storage access header allowing server opt unpartitioned cooky via http header storage access granted prior storage access api
+FR31: implemented cs root font relative unit rcap rch rex ric
+FR32: firefox lab available desktop user regardless whether choose participate study submit telemetry mean experimental feature available people
+FR33: user skip result page see direct result type search bar faster simpler browsing
+FR34: enhanced bounce tracking protection stateless mode enabled default etp strict blocking advanced tracking technique based redirection
+FR35: window user existing desktop shortcut launching firefox replaced desktop launcher small program launch firefox installed installed prompt user install firefox provide easy installation point firefox user acquire new window device firefox installed default desktop launcher program may synced via onedrive cloud storage product learn
+FR36: horizontal tab slightly rounded match look vertical tab button text input including address bar also updated consistency
+FR37: new tab weather opt workflow available user country choose whether enable location detection manually search location
+FR38: newtab weather workflow
+FR39: new brand inspired wallpaper available new tab desktop version light dark mode
+FR40: local translation model compressed zstandard reducing download size device storage consumption always firefox translation happen securely privately local device unlike browser translate using cloud service
+FR41: firefox natively support fractional scaled display linux wayland making rendering effective
+FR42: user english language version firefox france germany italy address bar show english language suggestion holiday important date
+FR43: timepicker enabled input type time input type datetime local provides full keyboard assistive technology support update also improves behavior time spin button user prefer reduced motion firefox accessibility team hope making built timepicker accessible encourage wider adoption browser provided time date input across web reducing need custom control improving accessibility user
+FR44: various security fix
+FR45: color dialog setting us clearer color picker control keep color sample next label make easier understand adjust text background link color using forced color palette customize default text link page background color especially without screen magnifier
+FR46: updated default automation preference better support agentic browsing reducing step agent need complete task chance agent get stuck
+FR47: firefox removed support direct2d window still require direct2d support please use esr 140 higher
+FR48: translation feature improved experience translating language different script direction
+FR49: firefox support kem webrtc sending post quantum key share dtls handshake kem next generation public key cryptosystem believed secure attacker large quantum computer
+FR50: firefox support compressed elliptic curve point webcrypto reduce size public key nearly half saving bandwidth storage still allowing full point reconstructed mathematically
+FR51: skia graphic library updated improve rendering performance compatibility
+FR52: unused cs custom property hidden default rule view inspector reduces clutter case also speed rendering inspector panel
+FR53: scope rule supported allowing author restrict styling subtree dom avoids write overly specific selector
+FR54: firefox support contrast color cs function take color value return contrasting color note specification currently restricts contrasting color black white limitation expected removed future learn
+FR55: introduced text decoration inset property allows author adjust start end point line decoration
+FR56: firefox support legacy webkit fill available keyword value cs width height property improves rendering content website use value keyword alias recently standardized stretch keyword yet enabled firefox
+FR57: add edit delete comment make note pdfs summary question task etc comment sidebar help scan comment quickly jump handy long heavily marked pdfs
+FR58: access manage saved password right sidebar need open new tab window stay page get logins faster
+FR59: version introduces new phase privacy protection building research reducing browser fingerprinting new defense cut percentage user seen unique almost half ensuring safer private browsing experience private browsing using enhanced tracking protection set strict
+FR60: copy link highlight allows user share arbitrary section page others copying link context menu given selection

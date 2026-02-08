@@ -1,0 +1,186 @@
+
+=== NFR NFR1 (Operational): Firefox shall provide high-performance rendering across multiple supported platforms while utilizing hardware acceleration. ===
+FR41: 0.5985 -- Firefox now natively supports fractional scaled displays on Linux (Wayland), making rendering more effective.
+FR51: 0.5345 -- The Skia graphics library has been updated to improve rendering performance and compatibility.
+FR56: 0.5210 -- Firefox now supports the legacy -webkit-fill-available keyword as a value for the CSS width and height properties. This improves rendering of content on websites that use this value. This keyword is an alias for the recently standardized stretch keyword, which is not yet enabled in Firefox.
+FR23: 0.4734 -- ES modules in service workers are now supported, aligning Firefox with other major browsers and improving compatibility for modern web apps.
+FR13: 0.4662 -- For Linux GNOME Mutter users, window and rendering surface sizes were updated to match the actual pixel grid so Firefox delivers sharp rendering on fractionally scaled displays regardless of the actual window size.
+FR2: 0.4262 -- Firefox now supports the Safe Browsing V5 protocol and is migrating from Safe Browsing V4 to the local list mode of Safe Browsing V5 protocol.
+FR54: 0.4187 -- Firefox now supports the contrast-color() CSS function that takes a color value and returns a contrasting color. Note that the specification currently restricts the contrasting color to black or white. This limitation is expected to be removed in the future. (Learn more)
+FR47: 0.4097 -- Firefox removed support for Direct2D on Windows. If you still require Direct2D support, please use ESR 140.0 or higher.
+FR50: 0.4021 -- Firefox now supports compressed elliptic curve points in WebCrypto. These reduce the size of public keys by nearly half, saving bandwidth and storage, while still allowing the full point to be reconstructed mathematically.
+FR16: 0.3946 -- MacOS users now have a dedicated GPU process by default. This includes WebGPU, WebGL, and Firefox's own WebRender. With this feature enabled, fatal errors in graphics code will no longer crash the browser, and will instead transparently restart the GPU process.
+FR27: 0.3580 -- Firefox now supports the :active-view-transition-type selector and associated View Transitions API changes.
+FR30: 0.3558 -- Firefox now supports Storage-Access-Headers, allowing servers to opt into unpartitioned cookies via HTTP headers if storage-access was granted prior to the Storage Access API.
+FR49: 0.3454 -- Firefox now supports ML-KEM for WebRTC, by sending a post-quantum (PQ) key share during the DTLS 1.3 handshake. ML-KEM is the next-generation public-key cryptosystem that is believed to be secure against attackers with large quantum computers.
+FR5: 0.3416 -- WebGPU support is now enabled for devices with Apple Silicon processors on all supported macOS versions.
+FR10: 0.3274 -- Fixed an issue that prevented some Windows users from selecting a tab when the cursor was at the top of the screen and the Firefox window was maximized.
+FR40: 0.3184 -- Local translation models are now compressed with Zstandard, reducing download sizes and on-device storage consumption. As always, all Firefox translations happen securely and privately on your local device, unlike other browsers that translate using cloud services.
+FR1: 0.3178 -- Improved video playback performance on systems with AMD GPUs by enabling zero-copy playback for hardware-decoded video where supported, bringing them to parity with Intel and NVIDIA GPUs.
+FR6: 0.3092 -- Firefox now allows you to customize your keyboard shortcuts to replace hard-to-type or hard-to-remember hotkeys, eliminate conflicts with other software, and create your preferred set. Access this experimental new feature by typing about:keyboard in the address bar and please share your feedback with us on Mozilla Connect!
+FR28: 0.2936 -- Firefox now exposes the view transition currently active on the document via the Document.activeViewTransition property.
+FR7: 0.2930 -- Firefox now supports the Freedesktop.org XDG Base Directory Specification.
+FR32: 0.2912 -- Firefox Labs is now available to all desktop users, regardless of whether they choose to participate in studies or submit telemetry. This means more experimental features are now available to more people.
+FR35: 0.2729 -- For most Windows users, the existing desktop shortcut for launching Firefox has been replaced with the desktop launcher, a small program that will launch Firefox if it is installed, but if it is not installed will prompt the user to install Firefox. This will provide an easy installation point for Firefox users who acquire a new Windows device, where Firefox will not be installed by default, but the desktop launcher program may have synced via OneDrive or other cloud storage product. Learn more.
+FR15: 0.2519 -- Firefox now uses the same quality values (q-values) in Accept-Language headers as other major browsers. The second language preference is now sent as q=0.9 instead of q=0.5, with subsequent language preferences decreasing by 0.1 each (minimum 0.1). This change fixes compatibility issues with some servers that incorrectly rejected requests with lower quality values.
+FR3: 0.2498 -- Users with Enhanced Tracking Protection (ETP) set to Strict will have local network access restrictions enabled by default. Firefox will now require users to explicitly allow public websites to access local network resources.
+FR59: 0.2467 -- This version introduces a new phase of privacy protections, building on our research on reducing browser fingerprinting. These new defenses cut the percentage of users seen as unique almost in half, ensuring a safer and more private browsing experience in Private Browsing or when using Enhanced Tracking Protection set to Strict.
+FR9: 0.2350 -- Windows 10 users can now automatically protect their passwords, bookmarks, and more by turning on backup in Firefox. Your browsing data is saved daily on your device and can be encrypted with a password. When you set up a fresh install of Firefox on any operating system for a new device or your current one, you can restore from this backup and pick up right where you left off. This feature is currently available on Windows devices and will be coming to other operating systems soon.
+FR33: 0.2266 -- Users can now skip the results page and see direct results as they type in the search bar for faster, simpler browsing.
+FR43: 0.2223 -- When the timepicker is enabled for <input type="time"> and <input type="datetime-local">, it now provides full keyboard and assistive technology support. This update also improves the behavior of the time spin buttons for users who prefer reduced motion. The Firefox Accessibility team hopes that making the built-in timepicker accessible will encourage wider adoption of browser-provided time and date inputs across the web, reducing the need for custom controls, and improving accessibility for all users.
+FR29: 0.2016 -- Support for CSS anchor positioning was added, enabling tethering elements. The anchor-positioned elements can then have their size and position set relative to the anchor elements to which they are bound.
+FR21: 0.1893 -- Added support for the Navigation API. This API provides the ability to initiate, intercept, and manage browser navigation actions. It is a successor to previous web platform features such as the History API and window.location, which solves their shortcomings.
+FR42: 0.1853 -- For users of the English-language versions of Firefox in France, Germany, and Italy, the address bar now shows English-language suggestions for holidays and other important dates.
+FR17: 0.1777 -- View Transitions: View transition pseudo-elements now appear in the elements panel and the associated animations appear in the animations panel.
+FR19: 0.1767 -- The JSON viewer now has a button to import the resource into Firefox Profiler to get a breakdown of its size.
+FR53: 0.1725 -- The @scope rule is now supported, allowing authors to restrict styling to a subtree of the DOM. This avoids having to write overly-specific selectors.
+FR39: 0.1641 -- New brand-inspired wallpapers are available for New Tab on desktop, with versions for both light and dark mode.
+FR60: 0.1561 -- Copy Link to Highlight allows users to share arbitrary sections of a page with others by copying a link through the context menu with a given selection.
+FR22: 0.1492 -- The Unicode ICU library was updated to release 78, bringing support for Unicode 17 and new locales.
+FR26: 0.1428 -- Both CompressionStream and DecompressionStream now support the Brotli format.
+FR36: 0.1399 -- Horizontal tabs are now slightly more rounded to match the look of vertical tabs. Buttons and text inputs, including the address bar, have also been updated for consistency.
+FR52: 0.1364 -- Unused CSS custom properties are now hidden by default in the Rule view of the Inspector. This not only reduces clutter, but in some cases also speeds up the rendering of the inspector panel.
+FR24: 0.1289 -- Support for CSS Module Scripts was added, allowing stylesheets to be imported using the JavaScript module system and import attributes.
+FR31: 0.1270 -- Implemented CSS root-font-relative units rcap, rch, rex and ric.
+FR34: 0.1240 -- Enhanced Bounce Tracking Protection’s stateless mode is now enabled by default in ETP Strict, blocking more advanced tracking techniques based on redirection.
+FR57: 0.1085 -- Add, edit, and delete comments to make your own notes in PDFs (summaries, questions, tasks, etc.). The comment sidebar helps you scan all your comments and quickly jump to them, which is handy for long or heavily marked-up PDFs.
+FR20: 0.1060 -- Pseudo-element selectors can now be added/edited in the CSS rules panel.
+FR14: 0.0964 -- Various security fixes.
+FR44: 0.0964 -- Various security fixes.
+FR55: 0.0948 -- Introduced the text-decoration-inset property, which allows authors to adjust the start and end points of line decorations.
+FR25: 0.0853 -- The CSS counter-* and quotes properties are now supported in the ::marker pseudo-element.
+FR46: 0.0849 -- We updated default automation preferences to better support Agentic browsing, reducing the steps agents need to complete a task and chances for the agent to get stuck.
+FR11: 0.0811 -- Fixed a bug that made HTTP/3 requests containing non-UTF-8 header values time out or fall back to HTTP/2 after a while.
+FR45: 0.0749 -- The Colors dialog in Settings now uses clearer color picker controls that keep each color sample next to its label. It makes it easier to understand and adjust text, background, and link colors when using a forced colors palette to customize the default text, link, and page background colors, especially with or without screen magnifiers.
+FR12: 0.0663 -- A draggable button can now be dragged if initiated from the button itself.
+FR48: 0.0630 -- The Translations feature has an improved experience when translating between languages with different script directions.
+FR58: 0.0615 -- You can now access and manage your saved passwords right from the sidebar—no need to open a new tab or window. Stay on the page you’re on and get to your logins faster.
+FR8: 0.0564 -- A Picture-in-Picture player window can now optionally be opened automatically for a video playing in a tab when that tab goes into the background. A special thanks to volunteer Daniele Ferla for contributing this feature!
+FR18: 0.0503 -- Anchor positioning: Elements with a valid anchor-name are given an 'anchor' badge in the elements view, and @position-try CSS rules are now displayed in the CSS rules panel when an element using position-try-fallbacks is selected.
+FR4: 0.0340 -- Address autofill has been enabled for users in Switzerland.
+FR38: 0.0077 -- Newtab Weather workflow
+FR37: -0.0092 -- There is a New Tab Weather opt-in workflow available for users in the EU and some other countries, where they can choose whether to enable location detection or manually search for a location.
+
+=== NFR NFR2 (Usability): Firefox shall protect users from malicious content, network tracking, and privacy concerns through safe browsing mechanisms and proactive restrictions. ===
+FR2: 0.7194 -- Firefox now supports the Safe Browsing V5 protocol and is migrating from Safe Browsing V4 to the local list mode of Safe Browsing V5 protocol.
+FR59: 0.6537 -- This version introduces a new phase of privacy protections, building on our research on reducing browser fingerprinting. These new defenses cut the percentage of users seen as unique almost in half, ensuring a safer and more private browsing experience in Private Browsing or when using Enhanced Tracking Protection set to Strict.
+FR3: 0.5861 -- Users with Enhanced Tracking Protection (ETP) set to Strict will have local network access restrictions enabled by default. Firefox will now require users to explicitly allow public websites to access local network resources.
+FR9: 0.5462 -- Windows 10 users can now automatically protect their passwords, bookmarks, and more by turning on backup in Firefox. Your browsing data is saved daily on your device and can be encrypted with a password. When you set up a fresh install of Firefox on any operating system for a new device or your current one, you can restore from this backup and pick up right where you left off. This feature is currently available on Windows devices and will be coming to other operating systems soon.
+FR30: 0.4869 -- Firefox now supports Storage-Access-Headers, allowing servers to opt into unpartitioned cookies via HTTP headers if storage-access was granted prior to the Storage Access API.
+FR6: 0.4494 -- Firefox now allows you to customize your keyboard shortcuts to replace hard-to-type or hard-to-remember hotkeys, eliminate conflicts with other software, and create your preferred set. Access this experimental new feature by typing about:keyboard in the address bar and please share your feedback with us on Mozilla Connect!
+FR56: 0.4467 -- Firefox now supports the legacy -webkit-fill-available keyword as a value for the CSS width and height properties. This improves rendering of content on websites that use this value. This keyword is an alias for the recently standardized stretch keyword, which is not yet enabled in Firefox.
+FR10: 0.4174 -- Fixed an issue that prevented some Windows users from selecting a tab when the cursor was at the top of the screen and the Firefox window was maximized.
+FR23: 0.4167 -- ES modules in service workers are now supported, aligning Firefox with other major browsers and improving compatibility for modern web apps.
+FR32: 0.4142 -- Firefox Labs is now available to all desktop users, regardless of whether they choose to participate in studies or submit telemetry. This means more experimental features are now available to more people.
+FR54: 0.3994 -- Firefox now supports the contrast-color() CSS function that takes a color value and returns a contrasting color. Note that the specification currently restricts the contrasting color to black or white. This limitation is expected to be removed in the future. (Learn more)
+FR49: 0.3983 -- Firefox now supports ML-KEM for WebRTC, by sending a post-quantum (PQ) key share during the DTLS 1.3 handshake. ML-KEM is the next-generation public-key cryptosystem that is believed to be secure against attackers with large quantum computers.
+FR40: 0.3864 -- Local translation models are now compressed with Zstandard, reducing download sizes and on-device storage consumption. As always, all Firefox translations happen securely and privately on your local device, unlike other browsers that translate using cloud services.
+FR7: 0.3782 -- Firefox now supports the Freedesktop.org XDG Base Directory Specification.
+FR50: 0.3747 -- Firefox now supports compressed elliptic curve points in WebCrypto. These reduce the size of public keys by nearly half, saving bandwidth and storage, while still allowing the full point to be reconstructed mathematically.
+FR42: 0.3714 -- For users of the English-language versions of Firefox in France, Germany, and Italy, the address bar now shows English-language suggestions for holidays and other important dates.
+FR47: 0.3624 -- Firefox removed support for Direct2D on Windows. If you still require Direct2D support, please use ESR 140.0 or higher.
+FR35: 0.3535 -- For most Windows users, the existing desktop shortcut for launching Firefox has been replaced with the desktop launcher, a small program that will launch Firefox if it is installed, but if it is not installed will prompt the user to install Firefox. This will provide an easy installation point for Firefox users who acquire a new Windows device, where Firefox will not be installed by default, but the desktop launcher program may have synced via OneDrive or other cloud storage product. Learn more.
+FR14: 0.3448 -- Various security fixes.
+FR44: 0.3448 -- Various security fixes.
+FR15: 0.3253 -- Firefox now uses the same quality values (q-values) in Accept-Language headers as other major browsers. The second language preference is now sent as q=0.9 instead of q=0.5, with subsequent language preferences decreasing by 0.1 each (minimum 0.1). This change fixes compatibility issues with some servers that incorrectly rejected requests with lower quality values.
+FR21: 0.3216 -- Added support for the Navigation API. This API provides the ability to initiate, intercept, and manage browser navigation actions. It is a successor to previous web platform features such as the History API and window.location, which solves their shortcomings.
+FR27: 0.2997 -- Firefox now supports the :active-view-transition-type selector and associated View Transitions API changes.
+FR41: 0.2968 -- Firefox now natively supports fractional scaled displays on Linux (Wayland), making rendering more effective.
+FR34: 0.2950 -- Enhanced Bounce Tracking Protection’s stateless mode is now enabled by default in ETP Strict, blocking more advanced tracking techniques based on redirection.
+FR19: 0.2759 -- The JSON viewer now has a button to import the resource into Firefox Profiler to get a breakdown of its size.
+FR28: 0.2720 -- Firefox now exposes the view transition currently active on the document via the Document.activeViewTransition property.
+FR43: 0.2625 -- When the timepicker is enabled for <input type="time"> and <input type="datetime-local">, it now provides full keyboard and assistive technology support. This update also improves the behavior of the time spin buttons for users who prefer reduced motion. The Firefox Accessibility team hopes that making the built-in timepicker accessible will encourage wider adoption of browser-provided time and date inputs across the web, reducing the need for custom controls, and improving accessibility for all users.
+FR16: 0.2332 -- MacOS users now have a dedicated GPU process by default. This includes WebGPU, WebGL, and Firefox's own WebRender. With this feature enabled, fatal errors in graphics code will no longer crash the browser, and will instead transparently restart the GPU process.
+FR58: 0.2225 -- You can now access and manage your saved passwords right from the sidebar—no need to open a new tab or window. Stay on the page you’re on and get to your logins faster.
+FR60: 0.2115 -- Copy Link to Highlight allows users to share arbitrary sections of a page with others by copying a link through the context menu with a given selection.
+FR4: 0.2011 -- Address autofill has been enabled for users in Switzerland.
+FR20: 0.2001 -- Pseudo-element selectors can now be added/edited in the CSS rules panel.
+FR57: 0.1904 -- Add, edit, and delete comments to make your own notes in PDFs (summaries, questions, tasks, etc.). The comment sidebar helps you scan all your comments and quickly jump to them, which is handy for long or heavily marked-up PDFs.
+FR13: 0.1831 -- For Linux GNOME Mutter users, window and rendering surface sizes were updated to match the actual pixel grid so Firefox delivers sharp rendering on fractionally scaled displays regardless of the actual window size.
+FR29: 0.1820 -- Support for CSS anchor positioning was added, enabling tethering elements. The anchor-positioned elements can then have their size and position set relative to the anchor elements to which they are bound.
+FR24: 0.1627 -- Support for CSS Module Scripts was added, allowing stylesheets to be imported using the JavaScript module system and import attributes.
+FR18: 0.1598 -- Anchor positioning: Elements with a valid anchor-name are given an 'anchor' badge in the elements view, and @position-try CSS rules are now displayed in the CSS rules panel when an element using position-try-fallbacks is selected.
+FR39: 0.1503 -- New brand-inspired wallpapers are available for New Tab on desktop, with versions for both light and dark mode.
+FR53: 0.1438 -- The @scope rule is now supported, allowing authors to restrict styling to a subtree of the DOM. This avoids having to write overly-specific selectors.
+FR33: 0.1410 -- Users can now skip the results page and see direct results as they type in the search bar for faster, simpler browsing.
+FR8: 0.1303 -- A Picture-in-Picture player window can now optionally be opened automatically for a video playing in a tab when that tab goes into the background. A special thanks to volunteer Daniele Ferla for contributing this feature!
+FR51: 0.1209 -- The Skia graphics library has been updated to improve rendering performance and compatibility.
+FR46: 0.1143 -- We updated default automation preferences to better support Agentic browsing, reducing the steps agents need to complete a task and chances for the agent to get stuck.
+FR52: 0.1126 -- Unused CSS custom properties are now hidden by default in the Rule view of the Inspector. This not only reduces clutter, but in some cases also speeds up the rendering of the inspector panel.
+FR5: 0.1066 -- WebGPU support is now enabled for devices with Apple Silicon processors on all supported macOS versions.
+FR36: 0.1051 -- Horizontal tabs are now slightly more rounded to match the look of vertical tabs. Buttons and text inputs, including the address bar, have also been updated for consistency.
+FR37: 0.0917 -- There is a New Tab Weather opt-in workflow available for users in the EU and some other countries, where they can choose whether to enable location detection or manually search for a location.
+FR1: 0.0901 -- Improved video playback performance on systems with AMD GPUs by enabling zero-copy playback for hardware-decoded video where supported, bringing them to parity with Intel and NVIDIA GPUs.
+FR11: 0.0803 -- Fixed a bug that made HTTP/3 requests containing non-UTF-8 header values time out or fall back to HTTP/2 after a while.
+FR17: 0.0769 -- View Transitions: View transition pseudo-elements now appear in the elements panel and the associated animations appear in the animations panel.
+FR25: 0.0754 -- The CSS counter-* and quotes properties are now supported in the ::marker pseudo-element.
+FR45: 0.0704 -- The Colors dialog in Settings now uses clearer color picker controls that keep each color sample next to its label. It makes it easier to understand and adjust text, background, and link colors when using a forced colors palette to customize the default text, link, and page background colors, especially with or without screen magnifiers.
+FR12: 0.0464 -- A draggable button can now be dragged if initiated from the button itself.
+FR55: 0.0416 -- Introduced the text-decoration-inset property, which allows authors to adjust the start and end points of line decorations.
+FR22: 0.0189 -- The Unicode ICU library was updated to release 78, bringing support for Unicode 17 and new locales.
+FR38: 0.0156 -- Newtab Weather workflow
+FR26: 0.0099 -- Both CompressionStream and DecompressionStream now support the Brotli format.
+FR48: -0.0069 -- The Translations feature has an improved experience when translating between languages with different script directions.
+FR31: -0.0464 -- Implemented CSS root-font-relative units rcap, rch, rex and ric.
+
+=== NFR NFR3 (Security): Firefox shall provide an intuitive, customizable, and accessible user experience that minimizes interaction time and complexity. ===
+FR6: 0.5968 -- Firefox now allows you to customize your keyboard shortcuts to replace hard-to-type or hard-to-remember hotkeys, eliminate conflicts with other software, and create your preferred set. Access this experimental new feature by typing about:keyboard in the address bar and please share your feedback with us on Mozilla Connect!
+FR2: 0.5684 -- Firefox now supports the Safe Browsing V5 protocol and is migrating from Safe Browsing V4 to the local list mode of Safe Browsing V5 protocol.
+FR56: 0.5125 -- Firefox now supports the legacy -webkit-fill-available keyword as a value for the CSS width and height properties. This improves rendering of content on websites that use this value. This keyword is an alias for the recently standardized stretch keyword, which is not yet enabled in Firefox.
+FR23: 0.4873 -- ES modules in service workers are now supported, aligning Firefox with other major browsers and improving compatibility for modern web apps.
+FR32: 0.4689 -- Firefox Labs is now available to all desktop users, regardless of whether they choose to participate in studies or submit telemetry. This means more experimental features are now available to more people.
+FR35: 0.4318 -- For most Windows users, the existing desktop shortcut for launching Firefox has been replaced with the desktop launcher, a small program that will launch Firefox if it is installed, but if it is not installed will prompt the user to install Firefox. This will provide an easy installation point for Firefox users who acquire a new Windows device, where Firefox will not be installed by default, but the desktop launcher program may have synced via OneDrive or other cloud storage product. Learn more.
+FR54: 0.4297 -- Firefox now supports the contrast-color() CSS function that takes a color value and returns a contrasting color. Note that the specification currently restricts the contrasting color to black or white. This limitation is expected to be removed in the future. (Learn more)
+FR10: 0.4220 -- Fixed an issue that prevented some Windows users from selecting a tab when the cursor was at the top of the screen and the Firefox window was maximized.
+FR59: 0.4168 -- This version introduces a new phase of privacy protections, building on our research on reducing browser fingerprinting. These new defenses cut the percentage of users seen as unique almost in half, ensuring a safer and more private browsing experience in Private Browsing or when using Enhanced Tracking Protection set to Strict.
+FR30: 0.4063 -- Firefox now supports Storage-Access-Headers, allowing servers to opt into unpartitioned cookies via HTTP headers if storage-access was granted prior to the Storage Access API.
+FR9: 0.4059 -- Windows 10 users can now automatically protect their passwords, bookmarks, and more by turning on backup in Firefox. Your browsing data is saved daily on your device and can be encrypted with a password. When you set up a fresh install of Firefox on any operating system for a new device or your current one, you can restore from this backup and pick up right where you left off. This feature is currently available on Windows devices and will be coming to other operating systems soon.
+FR43: 0.3988 -- When the timepicker is enabled for <input type="time"> and <input type="datetime-local">, it now provides full keyboard and assistive technology support. This update also improves the behavior of the time spin buttons for users who prefer reduced motion. The Firefox Accessibility team hopes that making the built-in timepicker accessible will encourage wider adoption of browser-provided time and date inputs across the web, reducing the need for custom controls, and improving accessibility for all users.
+FR49: 0.3927 -- Firefox now supports ML-KEM for WebRTC, by sending a post-quantum (PQ) key share during the DTLS 1.3 handshake. ML-KEM is the next-generation public-key cryptosystem that is believed to be secure against attackers with large quantum computers.
+FR41: 0.3841 -- Firefox now natively supports fractional scaled displays on Linux (Wayland), making rendering more effective.
+FR50: 0.3820 -- Firefox now supports compressed elliptic curve points in WebCrypto. These reduce the size of public keys by nearly half, saving bandwidth and storage, while still allowing the full point to be reconstructed mathematically.
+FR47: 0.3820 -- Firefox removed support for Direct2D on Windows. If you still require Direct2D support, please use ESR 140.0 or higher.
+FR27: 0.3644 -- Firefox now supports the :active-view-transition-type selector and associated View Transitions API changes.
+FR3: 0.3582 -- Users with Enhanced Tracking Protection (ETP) set to Strict will have local network access restrictions enabled by default. Firefox will now require users to explicitly allow public websites to access local network resources.
+FR40: 0.3540 -- Local translation models are now compressed with Zstandard, reducing download sizes and on-device storage consumption. As always, all Firefox translations happen securely and privately on your local device, unlike other browsers that translate using cloud services.
+FR42: 0.3437 -- For users of the English-language versions of Firefox in France, Germany, and Italy, the address bar now shows English-language suggestions for holidays and other important dates.
+FR28: 0.3282 -- Firefox now exposes the view transition currently active on the document via the Document.activeViewTransition property.
+FR15: 0.3065 -- Firefox now uses the same quality values (q-values) in Accept-Language headers as other major browsers. The second language preference is now sent as q=0.9 instead of q=0.5, with subsequent language preferences decreasing by 0.1 each (minimum 0.1). This change fixes compatibility issues with some servers that incorrectly rejected requests with lower quality values.
+FR13: 0.2930 -- For Linux GNOME Mutter users, window and rendering surface sizes were updated to match the actual pixel grid so Firefox delivers sharp rendering on fractionally scaled displays regardless of the actual window size.
+FR7: 0.2928 -- Firefox now supports the Freedesktop.org XDG Base Directory Specification.
+FR33: 0.2751 -- Users can now skip the results page and see direct results as they type in the search bar for faster, simpler browsing.
+FR21: 0.2669 -- Added support for the Navigation API. This API provides the ability to initiate, intercept, and manage browser navigation actions. It is a successor to previous web platform features such as the History API and window.location, which solves their shortcomings.
+FR16: 0.2586 -- MacOS users now have a dedicated GPU process by default. This includes WebGPU, WebGL, and Firefox's own WebRender. With this feature enabled, fatal errors in graphics code will no longer crash the browser, and will instead transparently restart the GPU process.
+FR57: 0.2567 -- Add, edit, and delete comments to make your own notes in PDFs (summaries, questions, tasks, etc.). The comment sidebar helps you scan all your comments and quickly jump to them, which is handy for long or heavily marked-up PDFs.
+FR58: 0.2457 -- You can now access and manage your saved passwords right from the sidebar—no need to open a new tab or window. Stay on the page you’re on and get to your logins faster.
+FR19: 0.2443 -- The JSON viewer now has a button to import the resource into Firefox Profiler to get a breakdown of its size.
+FR51: 0.2310 -- The Skia graphics library has been updated to improve rendering performance and compatibility.
+FR60: 0.2292 -- Copy Link to Highlight allows users to share arbitrary sections of a page with others by copying a link through the context menu with a given selection.
+FR14: 0.2245 -- Various security fixes.
+FR44: 0.2245 -- Various security fixes.
+FR36: 0.2148 -- Horizontal tabs are now slightly more rounded to match the look of vertical tabs. Buttons and text inputs, including the address bar, have also been updated for consistency.
+FR39: 0.2121 -- New brand-inspired wallpapers are available for New Tab on desktop, with versions for both light and dark mode.
+FR45: 0.2120 -- The Colors dialog in Settings now uses clearer color picker controls that keep each color sample next to its label. It makes it easier to understand and adjust text, background, and link colors when using a forced colors palette to customize the default text, link, and page background colors, especially with or without screen magnifiers.
+FR8: 0.1996 -- A Picture-in-Picture player window can now optionally be opened automatically for a video playing in a tab when that tab goes into the background. A special thanks to volunteer Daniele Ferla for contributing this feature!
+FR46: 0.1804 -- We updated default automation preferences to better support Agentic browsing, reducing the steps agents need to complete a task and chances for the agent to get stuck.
+FR52: 0.1740 -- Unused CSS custom properties are now hidden by default in the Rule view of the Inspector. This not only reduces clutter, but in some cases also speeds up the rendering of the inspector panel.
+FR20: 0.1692 -- Pseudo-element selectors can now be added/edited in the CSS rules panel.
+FR34: 0.1644 -- Enhanced Bounce Tracking Protection’s stateless mode is now enabled by default in ETP Strict, blocking more advanced tracking techniques based on redirection.
+FR17: 0.1466 -- View Transitions: View transition pseudo-elements now appear in the elements panel and the associated animations appear in the animations panel.
+FR29: 0.1450 -- Support for CSS anchor positioning was added, enabling tethering elements. The anchor-positioned elements can then have their size and position set relative to the anchor elements to which they are bound.
+FR1: 0.1417 -- Improved video playback performance on systems with AMD GPUs by enabling zero-copy playback for hardware-decoded video where supported, bringing them to parity with Intel and NVIDIA GPUs.
+FR12: 0.1242 -- A draggable button can now be dragged if initiated from the button itself.
+FR24: 0.1201 -- Support for CSS Module Scripts was added, allowing stylesheets to be imported using the JavaScript module system and import attributes.
+FR48: 0.1160 -- The Translations feature has an improved experience when translating between languages with different script directions.
+FR4: 0.1096 -- Address autofill has been enabled for users in Switzerland.
+FR38: 0.0915 -- Newtab Weather workflow
+FR18: 0.0880 -- Anchor positioning: Elements with a valid anchor-name are given an 'anchor' badge in the elements view, and @position-try CSS rules are now displayed in the CSS rules panel when an element using position-try-fallbacks is selected.
+FR55: 0.0819 -- Introduced the text-decoration-inset property, which allows authors to adjust the start and end points of line decorations.
+FR5: 0.0531 -- WebGPU support is now enabled for devices with Apple Silicon processors on all supported macOS versions.
+FR53: 0.0520 -- The @scope rule is now supported, allowing authors to restrict styling to a subtree of the DOM. This avoids having to write overly-specific selectors.
+FR37: 0.0496 -- There is a New Tab Weather opt-in workflow available for users in the EU and some other countries, where they can choose whether to enable location detection or manually search for a location.
+FR25: 0.0289 -- The CSS counter-* and quotes properties are now supported in the ::marker pseudo-element.
+FR11: 0.0201 -- Fixed a bug that made HTTP/3 requests containing non-UTF-8 header values time out or fall back to HTTP/2 after a while.
+FR22: 0.0094 -- The Unicode ICU library was updated to release 78, bringing support for Unicode 17 and new locales.
+FR26: -0.0022 -- Both CompressionStream and DecompressionStream now support the Brotli format.
+FR31: -0.0555 -- Implemented CSS root-font-relative units rcap, rch, rex and ric.

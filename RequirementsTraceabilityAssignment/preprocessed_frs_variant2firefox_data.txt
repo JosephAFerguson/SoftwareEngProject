@@ -1,0 +1,60 @@
+FR1: improv video playback perform system amd gpu enabl copi playback hardwar decod video support bring pariti intel nvidia gpu
+FR2: firefox support safe brows protocol migrat safe brows local list mode safe brows protocol
+FR3: user enhanc track protect etp set strict local network access restrict enabl default firefox requir user explicitli allow public websit access local network resourc
+FR4: address autofil enabl user switzerland
+FR5: webgpu support enabl devic appl silicon processor support maco version
+FR6: firefox allow custom keyboard shortcut replac hard type hard rememb hotkey elimin conflict softwar creat prefer set access experiment new featur type keyboard address bar pleas share feedback mozilla connect
+FR7: firefox support freedesktop org xdg base directori specif
+FR8: pictur pictur player window option open automat video play tab tab goe background special thank volunt daniel ferla contribut featur
+FR9: window user automat protect password bookmark turn backup firefox brows data save daili devic encrypt password set fresh instal firefox oper system new devic current restor backup pick right left featur current avail window devic come oper system soon
+FR10: fix issu prevent window user select tab cursor top screen firefox window maxim
+FR11: fix bug made request contain non utf header valu time fall back http
+FR12: draggabl button drag initi button
+FR13: linux gnome mutter user window render surfac size updat match actual pixel grid firefox deliv sharp render fraction scale display regardless actual window size
+FR14: variou secur fix
+FR15: firefox use qualiti valu valu accept languag header major browser second languag prefer sent instead subsequ languag prefer decreas minimum chang fix compat issu server incorrectli reject request lower qualiti valu
+FR16: maco user dedic gpu process default includ webgpu webgl firefox webrend featur enabl fatal error graphic code longer crash browser instead transpar restart gpu process
+FR17: view transit view transit pseudo element appear element panel associ anim appear anim panel
+FR18: anchor posit element valid anchor name given anchor badg element view posit tri css rule display css rule panel element use posit tri fallback select
+FR19: json viewer button import resourc firefox profil get breakdown size
+FR20: pseudo element selector ad edit css rule panel
+FR21: ad support navig api provid abil initi intercept manag browser navig action successor previou web platform featur histori api window locat solv shortcom
+FR22: unicod icu librari updat releas bring support unicod new local
+FR23: modul servic worker support align firefox major browser improv compat modern web app
+FR24: support css modul script ad allow stylesheet import use javascript modul system import attribut
+FR25: css counter quot properti support marker pseudo element
+FR26: compressionstream decompressionstream support brotli format
+FR27: firefox support activ view transit type selector associ view transit api chang
+FR28: firefox expos view transit current activ document document activeviewtransit properti
+FR29: support css anchor posit ad enabl tether element anchor posit element size posit set rel anchor element bound
+FR30: firefox support storag access header allow server opt unpartit cooki http header storag access grant prior storag access api
+FR31: implement css root font rel unit rcap rch rex ric
+FR32: firefox lab avail desktop user regardless choos particip studi submit telemetri mean experiment featur avail peopl
+FR33: user skip result page see direct result type search bar faster simpler brows
+FR34: enhanc bounc track protect stateless mode enabl default etp strict block advanc track techniqu base redirect
+FR35: window user exist desktop shortcut launch firefox replac desktop launcher small program launch firefox instal instal prompt user instal firefox provid easi instal point firefox user acquir new window devic firefox instal default desktop launcher program sync onedr cloud storag product learn
+FR36: horizont tab slightli round match look vertic tab button text input includ address bar also updat consist
+FR37: new tab weather opt workflow avail user countri choos enabl locat detect manual search locat
+FR38: newtab weather workflow
+FR39: new brand inspir wallpap avail new tab desktop version light dark mode
+FR40: local translat model compress zstandard reduc download size devic storag consumpt alway firefox translat happen secur privat local devic browser translat use cloud servic
+FR41: firefox nativ support fraction scale display linux wayland make render effect
+FR42: user english languag version firefox franc germani itali address bar show english languag suggest holiday import date
+FR43: timepick enabl input type time input type datetim local provid full keyboard assist technolog support updat also improv behavior time spin button user prefer reduc motion firefox access team hope make built timepick access encourag wider adopt browser provid time date input web reduc need custom control improv access user
+FR44: variou secur fix
+FR45: color dialog set use clearer color picker control keep color sampl label make easier understand adjust text background link color use forc color palett custom default text link page background color especi screen magnifi
+FR46: updat default autom prefer better support agent brows reduc step agent need complet task chanc agent get stuck
+FR47: firefox remov support direct2d window still requir direct2d support pleas use esr higher
+FR48: translat featur improv experi translat languag differ script direct
+FR49: firefox support kem webrtc send post quantum key share dtl handshak kem next gener public key cryptosystem believ secur attack larg quantum comput
+FR50: firefox support compress ellipt curv point webcrypto reduc size public key nearli half save bandwidth storag still allow full point reconstruct mathemat
+FR51: skia graphic librari updat improv render perform compat
+FR52: unus css custom properti hidden default rule view inspector reduc clutter case also speed render inspector panel
+FR53: scope rule support allow author restrict style subtre dom avoid write overli specif selector
+FR54: firefox support contrast color css function take color valu return contrast color note specif current restrict contrast color black white limit expect remov futur learn
+FR55: introduc text decor inset properti allow author adjust start end point line decor
+FR56: firefox support legaci webkit fill avail keyword valu css width height properti improv render content websit use valu keyword alia recent standard stretch keyword yet enabl firefox
+FR57: add edit delet comment make note pdf summari question task etc comment sidebar help scan comment quickli jump handi long heavili mark pdf
+FR58: access manag save password right sidebar need open new tab window stay page get login faster
+FR59: version introduc new phase privaci protect build research reduc fingerprint new defens cut percentag user seen uniqu almost half ensur safer privat brows experi privat brows use enhanc track protect set strict
+FR60: copi link highlight allow user share arbitrari section page other copi link context menu given select

@@ -1,0 +1,34 @@
+=== Traceability Results Summary ===
+
+Variant 1 (Basic Preprocessing):
+  TF-IDF Similarity F1-score: 0.6315289648622981
+  Embedding Similarity F1-score: 0.6712628089210367
+  SVM Classification F1-score: 0.7666666666666666
+
+Variant 2 (Aggressive Stemming + POS):
+  TF-IDF Similarity F1-score: 0.5350189933523267
+  Embedding Similarity F1-score: 0.6603174603174603
+  SVM Classification F1-score: 0.7666666666666666
+
+Variant 3 (Sentence-Level + NER):
+  TF-IDF Similarity F1-score: 0.6315289648622981
+  Embedding Similarity F1-score: 0.6712628089210367
+  SVM Classification F1-score: 0.7666666666666666
+
+=== Firefox Data Results ===
+
+Variant 1 (Basic Preprocessing):
+  TF-IDF Similarity F1-score: 0.5984920809772099
+  Embedding Similarity F1-score: 0.6413906142167012
+  SVM Classification F1-score: 0.7129629629629629
+
+Variant 2 (Aggressive Stemming + POS):
+  TF-IDF Similarity F1-score: 0.5686340869094355
+  Embedding Similarity F1-score: 0.6192565321879634
+  SVM Classification F1-score: 0.7023809523809524
+
+Variant 3 (Sentence-Level + NER):
+  TF-IDF Similarity F1-score: 0.5984920809772099
+  Embedding Similarity F1-score: 0.6472326956197924
+  SVM Classification F1-score: 0.7129629629629629
+
