@@ -1,0 +1,60 @@
+FR1: user shall search preferred repair facility using vehicle location radius mile
+FR2: vehicle location shall include street address city state zip code
+FR3: search radius shall mile
+FR4: system shall locate preferred repair facility highest rating input criterion
+FR5: adjuster shall enter preferred repair facility estimate assignment
+FR6: adjuster shall able override preferred repair facility estimate assignment
+FR7: preferred repair facility shall returned user
+FR8: system shall return list repair facility within radius preferred repair facility determined
+FR9: estimator shall search available recycled part using damaged vehicle part information
+FR10: estimator shall search available recycled part using list preferred part supplier
+FR11: system shall search available recycled part supplied vehicle part supplier
+FR12: estimator shall search zipcode radius mile part found preferred part supplier
+FR13: system shall retain available recycled part supplier returned search
+FR14: available recycled part information supplier shall returned user
+FR15: estimator shall apply selected recycled part collision estimate
+FR16: estimator shall apply recycled part collision estimate available part returned
+FR17: adjuster shall review collision estimate
+FR18: adjuster shall request recycled part audit collision estimate
+FR19: audit report shall include total number recycled part used estimate
+FR20: audit report shall include number available recycled part original search result
+FR21: audit report shall include percentage available recycled part used estimate
+FR22: audit report shall include total score audit sum individual line item
+FR23: audit report shall displayed user
+FR24: audit report shall available adjuster later point time
+FR25: user shall select view preferred repair facility rating
+FR26: system display blank set rating rating yet defined
+FR27: user shall enter new rating based audit report
+FR28: rating shall scale
+FR29: user shall select save preferred repair facility rating
+FR30: preferred repair facility rating shall saved system
+FR31: vehicle data shall include vehicle year make model
+FR32: system shall resolve zipcode street address city state zipcode unknown
+FR33: recycled part search result provided estimator shall retrieved system
+FR34: system shall generate audit report based available recycled part collision estimate
+FR35: current repair facility rating shall displayed user
+FR36: rating shall include category attempted use recycled part actual use recycled part
+FR37: system shall record repair facility visiting schedule entry
+FR38: system notify user repair facility visiting schedule
+FR39: system shall ability send repair facility visiting schedule reminder user
+FR40: system shall send repair facility contact information schedule creator
+FR41: system record repair facility visiting schedule acknowledgment
+FR42: system shall store new conference room
+FR43: system shall update existing conference room
+FR44: system able delete conference room
+FR45: system shall able store new recycled part
+FR46: system update existing recycled part
+FR47: system shall able delete recycled part
+FR48: time conference room reserved conference room schedule shall updated reflect time date reservation
+FR49: system shall display map repair facility building showing conference room location
+FR50: system shall record updated repair facility visiting schedule agenda
+FR51: system shall send repair facility visiting schedule confirmation schedule creator
+FR52: system shall record transportation status part reserved
+FR53: system shall record different schedule type
+FR54: system shall record recycled part reserved
+FR55: system shall notify repair facility recycled part transport request
+FR56: system allow privileged user view repair facility visiting schedule multiple reporting view
+FR57: system shall able send repair facility visiting schedule notification via different kind end user specified method
+FR58: system shall customizable look feel
+FR59: system shall intuitive user interface
+FR60: display shall two region left display graphical right display data table

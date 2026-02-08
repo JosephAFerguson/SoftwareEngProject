@@ -1,0 +1,60 @@
+FR1: user search prefer repair facil use vehicl locat radiu mile
+FR2: vehicl locat includ street address citi state zip code
+FR3: search radiu mile
+FR4: system locat prefer repair facil highest rate input criteria
+FR5: adjust enter prefer repair facil estim assign
+FR6: adjust abl overrid prefer repair facil estim assign
+FR7: prefer repair facil return user
+FR8: system return list repair facil radiu prefer repair facil determin
+FR9: estim search avail recycl part use damag vehicl part inform
+FR10: estim search avail recycl part use list prefer part supplier
+FR11: system search avail recycl part suppli vehicl part supplier
+FR12: estim search zipcod radiu mile part found prefer part supplier
+FR13: system retain avail recycl part supplier return search
+FR14: avail recycl part inform supplier return user
+FR15: estim appli select recycl part collis estim
+FR16: estim appli recycl part collis estim avail part return
+FR17: adjust review collis estim
+FR18: adjust request recycl part audit collis estim
+FR19: audit report includ total number recycl part use estim
+FR20: audit report includ number avail recycl part origin search result
+FR21: audit report includ percentag avail recycl part use estim
+FR22: audit report includ total score audit sum individu line item
+FR23: audit report display user
+FR24: audit report avail adjust later point time
+FR25: user select view prefer repair facil rate
+FR26: system display blank set rate rate yet defin
+FR27: user enter new rate base audit report
+FR28: rate scale
+FR29: user select save prefer repair facil rate
+FR30: prefer repair facil rate save system
+FR31: vehicl data includ vehicl year make model
+FR32: system resolv zipcod street address citi state zipcod unknown
+FR33: recycl part search result provid estim retriev system
+FR34: system gener audit report base avail recycl part collis estim
+FR35: current repair facil rate display user
+FR36: rate includ categori attempt use recycl part actual use recycl part
+FR37: system record repair facil visit schedul entri
+FR38: system notifi user repair facil visit schedul
+FR39: system abil send repair facil visit schedul remind user
+FR40: system send repair facil contact inform schedul creator
+FR41: system record repair facil visit schedul acknowledg
+FR42: system store new confer room
+FR43: system updat exist confer room
+FR44: system abl delet confer room
+FR45: system abl store new recycl part
+FR46: system updat exist recycl part
+FR47: system abl delet recycl part
+FR48: time confer room reserv confer room schedul updat reflect time date reserv
+FR49: system display map repair facil build show confer room locat
+FR50: system record updat repair facil visit schedul agenda
+FR51: system send repair facil visit schedul confirm schedul creator
+FR52: system record transport statu part reserv
+FR53: system record differ schedul type
+FR54: system record recycl part reserv
+FR55: system notifi repair facil recycl part transport request
+FR56: system allow privileg user view repair facil visit schedul multipl report view
+FR57: system abl send repair facil visit schedul notif differ kind end user specifi method
+FR58: system customiz look feel
+FR59: system intuit user interfac
+FR60: display region left display graphic right display data tabl
