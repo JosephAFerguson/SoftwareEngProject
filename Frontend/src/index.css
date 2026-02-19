@@ -9,6 +9,7 @@
   --color-primary: #004a9e;
   --color-secondary: #1c1c1e;
   --color-tertiary: #eaeaea;
+  --color-accent: var(--color-primary);
   --color-background: #ffffff;
 
   font-synthesis: none;
