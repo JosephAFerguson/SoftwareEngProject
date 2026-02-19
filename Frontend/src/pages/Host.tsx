@@ -123,8 +123,6 @@ export default function Host() {
           className={`${styles.uploadBox} ${previewUrls.length > 0 ? styles.hasImages : ''}`}
           onClick={handleUploadClick}
         >
-          <p>Upload Photos</p>
-          <span>Click to select images</span>
           {previewUrls.length > 0 && (
             <div className={styles.previewContainer}>
               {previewUrls.map((url, idx) => (
@@ -149,6 +147,9 @@ export default function Host() {
               ))}
             </div>
           )}
+
+          <p>Upload Photos</p>
+          <span>Click to select images</span>
         </div>
 
         <input

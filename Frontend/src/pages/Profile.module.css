@@ -4,3 +4,147 @@
   background-color: var(--color-background);
   color: var(--color-secondary);
 }
+
+.headerRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.editButton,
+.saveButton,
+.cancelButton {
+  padding: 0.5rem 0.75rem;
+  border-radius: 0.5rem;
+  border: none;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.editButton {
+  background-color: var(--color-accent);
+  color: var(--color-background);
+}
+
+.saveButton {
+  background-color: var(--color-accent);
+  color: var(--color-background);
+  margin-right: 0.5rem;
+}
+
+.cancelButton {
+  background-color: transparent;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.profileCard {
+  display: flex;
+  gap: 2rem;
+  background-color: var(--color-background);
+  padding: 1.5rem;
+  border-radius: 0.75rem;
+  box-shadow: 0 6px 16px rgba(0,0,0,0.06);
+}
+
+.avatarSection {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  min-width: 260px;
+}
+
+.avatarWrap {
+  position: relative;
+  width: 96px;
+  height: 96px;
+  border-radius: 50%;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(0,0,0,0.03);
+  cursor: pointer;
+}
+
+.avatar {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.initials {
+  font-weight: 700;
+  color: var(--color-secondary);
+  font-size: 1.25rem;
+}
+
+.avatarHint {
+  position: absolute;
+  bottom: 0.25rem;
+  left: 0.25rem;
+  right: 0.25rem;
+  font-size: 0.7rem;
+  text-align: center;
+  background: rgba(0,0,0,0.35);
+  color: white;
+  padding: 0.15rem 0.35rem;
+  border-radius: 0.35rem;
+}
+
+.infoSection {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.displayName {
+  margin: 0;
+}
+
+.nameInput {
+  padding: 0.5rem;
+  border-radius: 0.5rem;
+  border: 1px solid rgba(0,0,0,0.12);
+  background: var(--color-background);
+}
+
+.meta {
+  font-size: 0.85rem;
+  opacity: 0.8;
+}
+
+.prefsSection {
+  flex: 1;
+}
+
+.prefsView {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.prefsEdit {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.fieldLabel {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.fieldLabelCheckbox {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.input {
+  padding: 0.5rem;
+  border-radius: 0.5rem;
+  border: 1px solid rgba(0,0,0,0.12);
+}
