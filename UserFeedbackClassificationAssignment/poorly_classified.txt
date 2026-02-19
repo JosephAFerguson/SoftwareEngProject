@@ -1,0 +1,25 @@
+
+Label: BUG
+Confidence: 0.6
+totally satisfied with the quality of the service.
+
+
+Label: BUG
+Confidence: 0.6
+very good experience . bio b
+
+
+Label: BUG
+Confidence: 0.6
+Great tool to have
+
+
+Label: BUG
+Confidence: 0.6
+excellent
+
+
+Label: BUG
+Confidence: 0.6
+zoom is not supporting bluetooth connection many times and it's very irritating and frustrating
+
