@@ -1,0 +1,25 @@
+
+Label: BUG
+Confidence: 0.98
+i cant use it with cellular data. it tired me a lot... please fix it
+
+
+Label: BUG
+Confidence: 0.98
+Zoom not working my camera not open it's Show black screen only
+
+
+Label: BUG
+Confidence: 0.97
+whenever I'd login or sign up after sometimes this app logout from zoom account . it's very worse updateor glitch whatever, fix this issue team, please🙏
+
+
+Label: BUG
+Confidence: 0.96
+This app is 168mbs I have 1.5 gb free space and it keeps on telling me I don't have enough space 😡
+
+
+Label: BUG
+Confidence: 0.95
+Useless, does not work. Cannot switch from link to app, screen goes black than force crashes all the time!
+

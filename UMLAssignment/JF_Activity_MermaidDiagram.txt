@@ -1,0 +1,36 @@
+flowchart TD
+
+    A([Start]) --> B[Open App / Website]
+    B --> C{Logged In?}
+
+    C -- No --> D[Sign Up / Log In]
+    D --> E[Authenticate University Email]
+    E --> F[Create / Update Profile]
+
+    C -- Yes --> G[View Listings Page]
+
+    F --> G
+
+    G --> H[Set Filters / Preferences]
+    H --> I[Browse Listings]
+
+    I --> J{Select Listing?}
+
+    J -- No --> I
+
+    J -- Yes --> K[View Listing Details]
+    K --> L[View Location on Map]
+
+    L --> M{Interested?}
+
+    M -- No --> I
+
+    M -- Yes --> N[Message Host]
+    N --> O[Discuss Details]
+
+    O --> P{Agreement Reached?}
+
+    P -- No --> I
+
+    P -- Yes --> Q[Confirm Sublease]
+    Q --> R([End])

@@ -1,0 +1,63 @@
+
+===== Random Forest (3 Labels) =====
+Accuracy: 0.7793103448275862
+
+Confusion Matrix:
+[[101   0   0]
+ [ 21  11   0]
+ [ 10   1   1]]
+
+Classification Report:
+              precision    recall  f1-score   support
+
+         BUG       0.77      1.00      0.87       101
+     FEATURE       0.92      0.34      0.50        32
+       OTHER       1.00      0.08      0.15        12
+
+    accuracy                           0.78       145
+   macro avg       0.89      0.48      0.51       145
+weighted avg       0.82      0.78      0.73       145
+
+
+
+===== KNN (3 Labels) =====
+Accuracy: 0.7931034482758621
+
+Confusion Matrix:
+[[99  1  1]
+ [16 16  0]
+ [11  1  0]]
+
+Classification Report:
+              precision    recall  f1-score   support
+
+         BUG       0.79      0.98      0.87       101
+     FEATURE       0.89      0.50      0.64        32
+       OTHER       0.00      0.00      0.00        12
+
+    accuracy                           0.79       145
+   macro avg       0.56      0.49      0.50       145
+weighted avg       0.74      0.79      0.75       145
+
+
+
+===== Decision Tree (3 Labels) =====
+Accuracy: 0.7655172413793103
+
+Confusion Matrix:
+[[91  4  6]
+ [13 18  1]
+ [ 7  3  2]]
+
+Classification Report:
+              precision    recall  f1-score   support
+
+         BUG       0.82      0.90      0.86       101
+     FEATURE       0.72      0.56      0.63        32
+       OTHER       0.22      0.17      0.19        12
+
+    accuracy                           0.77       145
+   macro avg       0.59      0.54      0.56       145
+weighted avg       0.75      0.77      0.75       145
+
+

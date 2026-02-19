@@ -1,0 +1,25 @@
+
+Label: BUG
+Confidence: 1.0
+why it is not download in my device please solve problem
+
+
+Label: BUG
+Confidence: 1.0
+Terrible
+
+
+Label: FEATURE
+Confidence: 1.0
+helps me chat with my friends and stuff so supaaa useful
+
+
+Label: BUG
+Confidence: 1.0
+0 ratings, third class app. it made my meeting so bad hanging the entire laptop and doesn't even work on browsers. Worst app and made me rejected for the interview
+
+
+Label: BUG
+Confidence: 1.0
+আসসালামু আলাইকুম, আমি জুমে অনলাইন ক্লাস করতে পারতেছি না। আমার ফোন Samsung Galaxy j2 অনুগ্রহ করে আমাকে অনলাইন ক্লাস করার অনুমতি দিলে আমি আপনার নিকট চিরকৃতজ্ঞ থাকিব
+
