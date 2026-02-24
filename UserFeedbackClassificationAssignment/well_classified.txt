@@ -1,25 +1,25 @@
 
 Label: BUG
 Confidence: 1.0
-why it is not download in my device please solve problem
+good network
 
 
 Label: BUG
 Confidence: 1.0
-Terrible
-
-
-Label: FEATURE
-Confidence: 1.0
-helps me chat with my friends and stuff so supaaa useful
+I can't download it
 
 
 Label: BUG
 Confidence: 1.0
-0 ratings, third class app. it made my meeting so bad hanging the entire laptop and doesn't even work on browsers. Worst app and made me rejected for the interview
+terrible!
 
 
 Label: BUG
 Confidence: 1.0
-আসসালামু আলাইকুম, আমি জুমে অনলাইন ক্লাস করতে পারতেছি না। আমার ফোন Samsung Galaxy j2 অনুগ্রহ করে আমাকে অনলাইন ক্লাস করার অনুমতি দিলে আমি আপনার নিকট চিরকৃতজ্ঞ থাকিব
+Smoooth ya won't Post review if it's STARLESS or-0 🙄TRIED TO DOWNLOAD, WAITED, LOOKED LIKE all went well installing: BUT when done & things stopped downloading: The Install Button was STILL THERE like I'd NEVER touched it: downloaded it AGAIN watching really close: SAME BLOOM'N THING😳 we went ANOTHER way on the videocall: THANKS YA'LL: WE LEARNED OUR LESSON, BLESS you ALL PRECIOUS BELOVED 1'S Hoping ya get ALL the bugs OR glitchs outta it🕊✝️🧎🏾‍♀️🕎🙏🏼🙏🏼🙏🏼🫂🫂🫂💔🦋🦋🦋🦋🦋☕️Cheers☕️
+
+
+Label: BUG
+Confidence: 1.0
+too much time to download
 
