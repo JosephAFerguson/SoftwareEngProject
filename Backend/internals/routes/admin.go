@@ -8,6 +8,6 @@ import (
 func AdminRoutes(router fiber.Router, adminHandler *handlers.AdminHandler) {
     adminGroup := router.Group("/admin")
 
-    adminGroup.Post("/health", adminHandler.Health)
+    adminGroup.Get("/health", adminHandler.Health)
 }
 
