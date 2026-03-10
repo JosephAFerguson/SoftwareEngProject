@@ -25,15 +25,21 @@ func (h *AuthHandler) Signup(c *fiber.Ctx) error {
 	var user models.User
 
 	if err := c.BodyParser(&user); err != nil {
-		return c.Status(fiber.StatusBadRequest).JSON(err)
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+			"error": err.Error(),
+		})
 	}
 
 	if err := h.validate.Struct(user); err != nil {
-		return c.Status(fiber.StatusBadRequest).JSON(err)
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+			"error": err.Error(),
+		})
 	}
 
 	if err := h.service.Signup(user); err != nil {
-		return c.Status(fiber.StatusBadRequest).JSON(err)
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+			"error": err.Error(),
+		})
 	}
 
 	return c.SendStatus(fiber.StatusOK)
@@ -43,17 +49,22 @@ func (h *AuthHandler) Login(c *fiber.Ctx) error {
 	var user models.User
 
 	if err := c.BodyParser(&user); err != nil {
-		return c.Status(fiber.StatusBadRequest).JSON(err)
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+			"error": err.Error(),
+		})
 	}
 
 	if err := h.validate.Struct(user); err != nil {
-		return c.Status(fiber.StatusBadRequest).JSON(err)
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+			"error": err.Error(),
+		})
 	}
 
 	if err := h.service.Login(user); err != nil {
-		return c.Status(fiber.StatusBadRequest).JSON(err)
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+			"error": err.Error(),
+		})
 	}
-
 
 	return c.SendStatus(fiber.StatusOK)
 }

@@ -5,7 +5,7 @@ import (
 	"database/sql"
 
 	"github.com/gofiber/fiber/v2"
-	//"github.com/go-sql-driver/mysql" use for config
+	_ "github.com/go-sql-driver/mysql"
 	"github.com/go-playground/validator/v10"
 
 	"github.com/JosephAFerguson/SoftwareEngProject/internals/routes"
@@ -29,7 +29,7 @@ func main() {
 
 	// DB setup template code. Change user, password, dbname to actual
 	// MYSQL driver can be used to setup MYSQL-specific config
-	db, err := sql.Open("mysql", "user:password@/dbname")
+	db, err := sql.Open("mysql", "sublease-admin:password@/SoftwareEngProject")
 	if err != nil {
 		panic(err)
 	}
