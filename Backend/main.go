@@ -51,6 +51,12 @@ func main() {
 	//userHandler := handlers.NewUserHandler(validate)
 	//routes.UserRoutes(v1, userHandler)
 
+	//Rental Group
+	rentalRepo := repos.NewRentalRepo(db)
+	rentalService := services.NewRentalService(rentalRepo)
+	rentalHandler := handlers.NewRentalHandler(validate, rentalService)
+	routes.RentalRoutes(v1, rentalHandler)
+
 	log.Fatal(app.Listen(":" + PORT))
 }
 

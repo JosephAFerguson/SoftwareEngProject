@@ -14,16 +14,9 @@ That being said, for documentation on how the DB is actually configured, you can
 
 == [ Initialization ] <init>
 *_TLDR_* Copy and paste the following: \
-`sudo mysql < admin.sql` \
-`sudo mysql` -> `CREATE DATABASE SoftwareEngProject` \
-`sudo mysql < sublease.sql` \
-
-*_1._* Run the _admin.sql_ file to create the admin user the backend uses by default (e.g. `sudo mysql < admin.sql`). You can optionally use your own user and change the user field in main.go. I was going to back this an environment variable, but I figured people can just use the provided admin user (hopefully).
-
-*_2._* Either run `sudo mysql` to use your default root/superuser user, or to use the mysql cli with the created admin user do `mysql --user=sublease-admin --password=password`. Once you have signed in and are in the mysql cli, create the database for this project `CREATE DATABASE <dbname>`. To adhere to the main.go file, use `CREATE DATABASE SoftwareEngProject`. However, you can make this whatever _as long as_ you change the appropriate value in main.go.
-
-*_3._* Now that you have created your database, run the command `sudo mysql <dbname> < sublease.sql` where <dbname> is the name of your database. This will insert all of the needed tables from the ERD with the modifications described above.
+`sudo mysql` to enter the mysql cli, then run `CREATE DATABASE SoftwareEngProject` \
+exit the mysql cli and run `sudo mysql < admin.sql` \
+finally, run `sudo mysql < sublease.sql` \
 
 == [ Tests ] <tests>
-All of the _.zsh_ files are test scripts you can run to make sure certain endpoints work. I have them in _/db_ for now because I was using them to test DB integration. Will probably move these later, but thats what they are.
-
+All of the _.sh_ files are test scripts you can run to make sure certain endpoints work. I have them in _/db_ for now because I was using them to test DB integration. Will probably move these later, but thats what they are. For scripts that require an argument, that argument is the amount of entries to add. The script will automatically populate that many entries to the database.
