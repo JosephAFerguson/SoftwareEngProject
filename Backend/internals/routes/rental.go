@@ -10,5 +10,6 @@ func RentalRoutes(router fiber.Router, rentalHandler *handlers.RentalHandler) {
 
     rentalGroup.Post("/", rentalHandler.Post)
 	rentalGroup.Get("/", rentalHandler.Get)
+	rentalGroup.Get("/all", rentalHandler.GetAll)
 }
 

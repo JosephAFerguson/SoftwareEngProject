@@ -2,16 +2,13 @@
 // IMPORTS
 // ============================================================================
 
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect } from "react";
 import styles from './Find.module.css';
 import { GoogleMap, Marker } from "@react-google-maps/api";
-import { FiMinimize2 , FiSearch} from "react-icons/fi";
-
-import pic1 from "../../public/pic1.png";
-import pic2 from "../../public/pic2.png";
-import pic3 from "../../public/pic3.png";
-import pic4 from "../../public/pic4.png";
-import pic5 from "../../public/pic5.png";
+import { FiMinimize2 } from "react-icons/fi";
+import { S3Client, GetObjectCommand } from "@aws-sdk/client-s3";
+import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
+import pic1 from "../../public/unit-1/photo1.png";
 
 // ============================================================================
 // TYPES
@@ -28,6 +25,14 @@ type Listing = {
   lat: number;
   lng: number;
   imageUrl: string;
+  sqft?: number;
+  roommates?: number;
+  bednum?: number;
+  bathnum?: number;
+  pet_friendly?: boolean;
+  available_from?: string;
+  available_to?: string;
+  photos?: string[];
 };
 
 // ============================================================================
@@ -35,65 +40,9 @@ type Listing = {
 // ============================================================================
 
 /**
- * Mock data for rental listings
- * TODO: Replace with API call to Backend service
+ * Backend API endpoint used for rental lookup
  */
-const listings: Listing[] = [
-  {
-    id: 1,
-    title: "Private Room Near UC",
-    price: 700,
-    address: "235 Calhoun St, Cincinnati, OH",
-    lat: 39.1302,
-    lng: -84.5150,
-    imageUrl: pic1,
-  },
-  {
-    id: 2,
-    title: "Studio on Short Vine",
-    price: 950,
-    address: "2724 Short Vine St, Cincinnati, OH",
-    lat: 39.1286,
-    lng: -84.5144,
-    imageUrl: pic2,
-  },
-  {
-    id: 3,
-    title: "Shared Apartment",
-    price: 600,
-    address: "305 Warner St, Cincinnati, OH",
-    lat: 39.1273,
-    lng: -84.5186,
-    imageUrl: pic3,
-  },
-  {
-    id: 4,
-    title: "2BR Apartment",
-    price: 1200,
-    address: "2900 Jefferson Ave, Cincinnati, OH",
-    lat: 39.1316,
-    lng: -84.5198,
-    imageUrl: pic4,
-  },
-  {
-    id: 5,
-    title: "Basement Unit",
-    price: 550,
-    address: "2601 Highland Ave, Cincinnati, OH",
-    lat: 39.1279,
-    lng: -84.5209,
-    imageUrl: pic5,
-  },
-  {
-    id: 6,
-    title: "Modern Condo",
-    price: 1400,
-    address: "2510 Clifton Ave, Cincinnati, OH",
-    lat: 39.1329,
-    lng: -84.5216,
-    imageUrl: pic1,
-  },
-];
+const API_URL = "http://localhost:3000/api/v1/rental";
 
 /**
  * Google Map container styling
@@ -110,6 +59,69 @@ const defaultCenter = {
   lat: 39.1310,
   lng: -84.5165,
 };
+
+// ============================================================================
+// AWS S3 CONFIGURATION
+// ============================================================================
+
+/**
+ * Initialize S3 client
+ * Configure with your AWS credentials and region
+ */
+const s3Client = new S3Client({
+  region: import.meta.env.VITE_AWS_REGION || "us-east-1",
+  credentials: {
+    accessKeyId: import.meta.env.VITE_AWS_ACCESS_KEY_ID || "",
+    secretAccessKey: import.meta.env.VITE_AWS_SECRET_ACCESS_KEY || "",
+  },
+});
+
+/**
+ * Generate a presigned URL for an S3 object
+ * @param bucketName - S3 bucket name
+ * @param objectKey - Object key/path in S3
+ * @param expiresIn - Expiration time in seconds (default: 3600 = 1 hour)
+ * @returns Presigned URL for accessing the object, empty string if generation fails
+ */
+async function getS3PhotoUrl(
+  bucketName: string,
+  objectKey: string,
+  expiresIn: number = 3600
+): Promise<string> {
+  try {
+    // Check if credentials are configured
+    const accessKeyId = import.meta.env.VITE_AWS_ACCESS_KEY_ID;
+    const secretAccessKey = import.meta.env.VITE_AWS_SECRET_ACCESS_KEY;
+    const region = import.meta.env.VITE_AWS_REGION;
+    const bucket = import.meta.env.VITE_S3_BUCKET;
+
+    console.log("[S3 DEBUG] Environment variables:", {
+      accessKeyId: accessKeyId ? "SET" : "NOT SET",
+      secretAccessKey: secretAccessKey ? "SET" : "NOT SET",
+      region: region || "us-east-1",
+      bucket: bucket || "sublease-photos"
+    });
+    
+    if (!accessKeyId || !secretAccessKey) {
+      console.warn("AWS credentials not configured. Photos will not load.");
+      return "";
+    }
+
+    console.log(`[S3] Generating presigned URL for: s3://${bucketName}/${objectKey}`);
+
+    const command = new GetObjectCommand({
+      Bucket: bucketName,
+      Key: objectKey,
+    });
+
+    const url = await getSignedUrl(s3Client, command, { expiresIn });
+    console.log(`[S3] Successfully generated URL for ${objectKey}`);
+    return url;
+  } catch (error) {
+    console.error("Error generating S3 URL:", error);
+    return "";
+  }
+}
 
 // ============================================================================
 // COMPONENT
@@ -132,14 +144,77 @@ export default function Find() {
   const [lockedListingId, setLockedListingId] = useState<number | null>(null);
   const mapRef = useRef<google.maps.Map | null>(null);
   const [zoom, setZoom] = useState(14);
-  const [filterExpanded, setFilterExpanded] = useState(false);
-  const [minPrice, setMinPrice] = useState<number>(0);
-  const [maxPrice, setMaxPrice] = useState<number>(2000);
-  const [searchQuery, setSearchQuery] = useState<string>("");
+
+  const [allListings, setAllListings] = useState<Listing[]>([]);
+  const [listingPhotoIndices, setListingPhotoIndices] = useState<Map<number, number>>(new Map());
 
   // ========================================================================
-  // EVENT HANDLERS
+  // EFFECTS
   // ========================================================================
+
+  useEffect(() => {
+    fetchAllListings();
+  }, []);
+
+  // ========================================================================
+  // API CALLS
+  // ========================================================================
+
+  const fetchAllListings = async () => {
+    console.log("[DEBUG] fetchAllListings called");
+
+    try {
+      const response = await fetch(`${API_URL}/all`);
+      if (!response.ok) {
+        throw new Error(`${response.status} ${response.statusText}`);
+      }
+
+      const data = await response.json();
+      console.log("[DEBUG] API response data:", data);
+      const listings: Listing[] = await Promise.all(
+        data.rentals.map(async (rental: any, index: number) => {
+          // Generate S3 presigned URLs for photos
+          let photoUrls: string[] = [];
+          if (rental.photos && Array.isArray(rental.photos)) {
+            console.log(`[S3] Processing ${rental.photos.length} photos for listing ${rental.listing_id}:`, rental.photos);
+            photoUrls = await Promise.all(
+              rental.photos.map(async (photoKey: string) => {
+                // Assume photos are stored with bucket name from env
+                const bucketName = import.meta.env.VITE_S3_BUCKET || "sublease-photos";
+                return await getS3PhotoUrl(bucketName, photoKey);
+              })
+            );
+            // Filter out any empty URLs that failed to generate
+            photoUrls = photoUrls.filter(url => url.length > 0);
+            console.log(`[S3] Generated ${photoUrls.length} valid presigned URLs for listing ${rental.listing_id}`);
+          }
+
+          return {
+            id: rental.listing_id || index + 1,
+            title: rental.title || `Rental at ${rental.address}`,
+            price: Number(rental.price || 0),
+            address: rental.address || "",
+            lat: 39.1310 + (Math.random() - 0.5) * 0.01,
+            lng: -84.5165 + (Math.random() - 0.5) * 0.01,
+            imageUrl: photoUrls.length > 0 ? photoUrls[0] : "",
+            sqft: rental.sqft,
+            roommates: rental.roommates,
+            bednum: rental.bednum,
+            bathnum: rental.bathnum,
+            pet_friendly: rental.pet_friendly,
+            available_from: rental.available_from,
+            available_to: rental.available_to,
+            photos: photoUrls,
+          };
+        })
+      );
+
+      setAllListings(listings);
+    } catch (error) {
+      console.error("Error fetching listings:", error);
+      setAllListings([]);
+    }
+  };
 
   /**
    * Updates the selected listing and centers the map on it
@@ -176,7 +251,6 @@ export default function Find() {
     } else {
       // Lock the card and expand it
       setLockedListingId(listing.id);
-      setFilterExpanded(false); // Hide filter when expanding card
       handleSelectListing(listing);
 
       // Scroll the expanded card into view
@@ -198,34 +272,38 @@ export default function Find() {
   };
 
   /**
-   * Toggles the filter panel open/closed
+   * Gets the current photo index for a specific listing
    */
-  const handleToggleFilter = () => {
-    setFilterExpanded(!filterExpanded);
+  const getListingPhotoIndex = (listingId: number): number => {
+    return listingPhotoIndices.get(listingId) || 0;
   };
 
   /**
-   * Applies filters and closes the filter panel
+   * Sets the current photo index for a specific listing
    */
-  const handleApplyFilters = () => {
-    setFilterExpanded(false);
-    // TODO: Filter the listings array based on the filter criteria
+  const setListingPhotoIndex = (listingId: number, index: number) => {
+    setListingPhotoIndices(prev => new Map(prev.set(listingId, index)));
   };
 
   /**
-   * Resets all filters to default values
+   * Navigates to the next photo for a specific listing
    */
-  const handleResetFilters = () => {
-    setMinPrice(0);
-    setMaxPrice(2000);
-    setSearchQuery("");
+  const handleListingNextPhoto = (listingId: number, photos: string[]) => {
+    const currentIndex = getListingPhotoIndex(listingId);
+    const nextIndex = (currentIndex + 1) % photos.length;
+    setListingPhotoIndex(listingId, nextIndex);
   };
 
-  // ========================================================================
-  // API CALLS
-  // ========================================================================
+  /**
+   * Navigates to the previous photo for a specific listing
+   */
+  const handleListingPrevPhoto = (listingId: number, photos: string[]) => {
+    const currentIndex = getListingPhotoIndex(listingId);
+    const prevIndex = currentIndex === 0 ? photos.length - 1 : currentIndex - 1;
+    setListingPhotoIndex(listingId, prevIndex);
+  };
 
-  // TODO: Implement and integrate with real data from backend API
+  const displayedListings = allListings;
 
   // ========================================================================
   // RENDER
@@ -237,115 +315,14 @@ export default function Find() {
       {/* LISTINGS SECTION (Left Column) */}
       {/* ============================================================== */}
       <div className={styles.listingsContainer}>
-        {/* Filter panel (hidden when card is expanded) */}
-        {/* ============================================================== */}
-        {lockedListingId === null && (
-          <div className={styles.filterSlot}>
-            <div
-              className={`${styles.listingsFilter} ${
-                filterExpanded ? styles.filterExpanded : ""
-              }`}
-              onClick={!filterExpanded ? handleToggleFilter : undefined}
-            >
-              {/* Filter header */}
-              <div className={styles.filterHeader}>
-                <div className={styles.filterHeaderLeft}>
-                  <FiSearch size={20} />
-                  <span>Filters</span>
-                </div>
-
-                {filterExpanded && (
-                  <FiMinimize2
-                    size={20}
-                    className={styles.filterMinimizeIcon}
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      setFilterExpanded(false);
-                    }}
-                    title="Close filters"
-                  />
-                )}
-              </div>
-
-              {/* Expanded filter options */}
-              {filterExpanded && (
-                <div className={styles.filterOptions}>
-                  {/* Search */}
-                  <div className={styles.filterGroup}>
-                    <label htmlFor="search-input">Search</label>
-                    <input
-                      id="search-input"
-                      type="text"
-                      placeholder="Search listings..."
-                      value={searchQuery}
-                      onChange={(e) => setSearchQuery(e.target.value)}
-                      className={styles.filterInput}
-                    />
-                  </div>
-
-                  {/* Price range */}
-                  <div className={styles.filterGroup}>
-                    <label>Price Range</label>
-                    <div className={styles.priceRangeContainer}>
-                      <div className={styles.priceInput}>
-                        <label htmlFor="min-price">Min</label>
-                        <input
-                          id="min-price"
-                          type="number"
-                          min="0"
-                          max={maxPrice}
-                          value={minPrice}
-                          onChange={(e) => setMinPrice(Number(e.target.value))}
-                          className={styles.filterInput}
-                        />
-                      </div>
-
-                      <span className={styles.priceSeparator}>-</span>
-
-                      <div className={styles.priceInput}>
-                        <label htmlFor="max-price">Max</label>
-                        <input
-                          id="max-price"
-                          type="number"
-                          min={minPrice}
-                          value={maxPrice}
-                          onChange={(e) => setMaxPrice(Number(e.target.value))}
-                          className={styles.filterInput}
-                        />
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Actions */}
-                  <div className={styles.filterActions}>
-                    <button
-                      className={styles.resetButton}
-                      onClick={handleResetFilters}
-                    >
-                      Reset
-                    </button>
-                    <button
-                      className={styles.applyButton}
-                      onClick={handleApplyFilters}
-                    >
-                      Apply Filters
-                    </button>
-                  </div>
-                </div>
-              )}
-            </div>
-          </div>
-        )}
-
-
-        {/* Listings grid (hidden when filter is expanded) */}
+        {/* Listings grid */}
           <div
             className={`${styles.listingsGrid} ${
               lockedListingId !== null ? styles.hasExpanded : ""
             }`}
           >
           {/* Map through listings and render cards */}
-          {listings.map((listing) => (
+          {displayedListings.map((listing) => (
             <div
               key={listing.id}
               id={`listing-${listing.id}`}
@@ -370,12 +347,83 @@ export default function Find() {
                   )}
                 </div>
 
-                {/* Listing image */}
-                <img
-                  src={listing.imageUrl}
-                  alt={listing.title}
-                  className={styles.listingImage}
-                />
+                {/* Listing image with photo viewer */}
+                {listing.photos && listing.photos.length > 0 ? (
+                  <div className={styles.photoViewer}>
+                    <div className={styles.photoContainer}>
+                      {/* Previous photo arrow */}
+                      {listing.photos.length > 1 && (
+                        <button 
+                          className={`${styles.photoArrow} ${styles.photoArrowLeft}`}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleListingPrevPhoto(listing.id, listing.photos!);
+                          }}
+                          title="Previous photo"
+                        >
+                          ‹
+                        </button>
+                      )}
+
+                      {/* Main photo display */}
+                      <img
+                        src={listing.photos[getListingPhotoIndex(listing.id)] || pic1}
+                        alt={`${listing.title} - Photo ${getListingPhotoIndex(listing.id) + 1}`}
+                        className={styles.listingImage}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleListingNextPhoto(listing.id, listing.photos!);
+                        }}
+                        onError={(e) => {
+                          console.log(`[IMAGE ERROR] Failed to load photo ${getListingPhotoIndex(listing.id) + 1} for listing ${listing.id}:`, listing.photos![getListingPhotoIndex(listing.id)]);
+                          // Fallback to default image if photo fails to load
+                          (e.target as HTMLImageElement).src = pic1;
+                        }}
+                      />
+
+                      {/* Next photo arrow */}
+                      {listing.photos.length > 1 && (
+                        <button 
+                          className={`${styles.photoArrow} ${styles.photoArrowRight}`}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleListingNextPhoto(listing.id, listing.photos!);
+                          }}
+                          title="Next photo"
+                        >
+                          ›
+                        </button>
+                      )}
+                    </div>
+
+                    {/* Photo indicators */}
+                    {listing.photos.length > 1 && (
+                      <div className={styles.photoIndicators}>
+                        {listing.photos.map((_, index) => (
+                          <span 
+                            key={index}
+                            className={`${styles.photoIndicator} ${index === getListingPhotoIndex(listing.id) ? styles.active : ''}`}
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setListingPhotoIndex(listing.id, index);
+                            }}
+                          />
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                ) : (
+                  <img
+                    src={listing.imageUrl || pic1}
+                    alt={listing.title}
+                    className={styles.listingImage}
+                    onError={(e) => {
+                      console.log(`[IMAGE ERROR] Failed to load main image for listing ${listing.id}:`, listing.imageUrl);
+                      // Fallback to default image if photo fails to load
+                      (e.target as HTMLImageElement).src = pic1;
+                    }}
+                  />
+                )}
 
                 {/* Listing details */}
                 <p>{listing.address}</p>
@@ -385,7 +433,16 @@ export default function Find() {
                 {lockedListingId === listing.id && (
                   <div className={styles.expandedDetails}>
                     <h4>Listing Details</h4>
-                    <p>More information about the listing can go here.</p>
+                
+                    <div className={styles.detailsGrid}>
+                      {listing.sqft && <p><strong>Square Footage:</strong> {listing.sqft} sq ft</p>}
+                      {listing.roommates !== undefined && <p><strong>Roommates:</strong> {listing.roommates}</p>}
+                      {listing.bednum !== undefined && <p><strong>Bedrooms:</strong> {listing.bednum}</p>}
+                      {listing.bathnum !== undefined && <p><strong>Bathrooms:</strong> {listing.bathnum}</p>}
+                      {listing.pet_friendly !== undefined && <p><strong>Pet Friendly:</strong> {listing.pet_friendly ? 'Yes' : 'No'}</p>}
+                      {listing.available_from && <p><strong>Available From:</strong> {new Date(listing.available_from).toLocaleDateString()}</p>}
+                      {listing.available_to && <p><strong>Available To:</strong> {new Date(listing.available_to).toLocaleDateString()}</p>}
+                    </div>
                   </div>
                 )}
               </div>
@@ -411,7 +468,7 @@ export default function Find() {
           }}
         >
           {/* Render markers for each listing */}
-          {listings.map((listing) => (
+          {displayedListings.map((listing) => (
             <Marker
               key={listing.id}
               position={{ lat: listing.lat, lng: listing.lng }}

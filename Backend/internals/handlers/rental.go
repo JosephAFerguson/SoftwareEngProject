@@ -1,6 +1,8 @@
 package handlers
 
 import (
+	"errors"
+
 	"github.com/gofiber/fiber/v2"
 	"github.com/go-playground/validator/v10"
 
@@ -37,12 +39,19 @@ func (h *RentalHandler) Post(c *fiber.Ctx) error {
 	}
 
 	if err := h.service.Post(rental); err != nil {
-		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+		statusCode := fiber.StatusBadRequest
+		if errors.Is(err, services.ErrUserAlreadyHosting) {
+			statusCode = fiber.StatusConflict
+		}
+
+		return c.Status(statusCode).JSON(fiber.Map{
 			"error": err.Error(),
 		})
 	}
 
-	return c.SendStatus(fiber.StatusOK)
+	return c.Status(fiber.StatusOK).JSON(fiber.Map{
+		"message": "Rental posted successfully",
+	})
 }
 
 func (h *RentalHandler) Get(c *fiber.Ctx) error {
@@ -60,13 +69,19 @@ func (h *RentalHandler) Get(c *fiber.Ctx) error {
 		})
 	}
 
+	return c.Status(fiber.StatusOK).JSON(re)
+}
+
+func (h *RentalHandler) GetAll(c *fiber.Ctx) error {
+	rentals, err := h.service.GetAll()
+	if err != nil {
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+			"error": err.Error(),
+		})
+	}
+
 	return c.Status(fiber.StatusOK).JSON(fiber.Map{
-		"address": 	 re.Address,
-		"price": 	 re.Price,
-		"sqft": 	 re.Sqft,
-		"roomates":  re.Roommates,
-		"bedrooms":  re.Bednum,
-		"bathrooms": re.Bathnum,
+		"rentals": rentals,
 	})
 }
 

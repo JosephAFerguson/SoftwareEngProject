@@ -36,13 +36,16 @@ func (h *AuthHandler) Signup(c *fiber.Ctx) error {
 		})
 	}
 
-	if err := h.service.Signup(user); err != nil {
+	userID, err := h.service.Signup(user)
+	if err != nil {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
 			"error": err.Error(),
 		})
 	}
 
-	return c.SendStatus(fiber.StatusOK)
+	return c.Status(fiber.StatusOK).JSON(fiber.Map{
+		"user_id": userID,
+	})
 }
 
 func (h *AuthHandler) Login(c *fiber.Ctx) error {
@@ -60,12 +63,15 @@ func (h *AuthHandler) Login(c *fiber.Ctx) error {
 		})
 	}
 
-	if err := h.service.Login(user); err != nil {
+	userID, err := h.service.Login(user)
+	if err != nil {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
 			"error": err.Error(),
 		})
 	}
 
-	return c.SendStatus(fiber.StatusOK)
+	return c.Status(fiber.StatusOK).JSON(fiber.Map{
+		"user_id": userID,
+	})
 }
 

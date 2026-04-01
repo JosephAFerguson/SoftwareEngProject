@@ -27,220 +27,6 @@
 }
 
 /* ========================================================================== */
-/* FILTER PANEL */
-/* ========================================================================== */
-.filterSlot {
-  position: relative;
-  height: 5rem; /* collapsed filter height */
-  z-index: 10;
-}
-
-/**
- * Filter panel wrapper
- * Collapsed by default with small max-height, expands when filterExpanded is applied
- */
-.listingsFilter {
-  border: 1px solid var(--color-secondary);
-  border-radius: 5rem;
-}
-
-.listingsFilter {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: calc(100% - 3.75rem);
-  background-color: var(--color-background);
-  border-radius: 0.75rem;
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
-  padding: 0.75rem 1.25rem;
-
-  overflow: hidden;
-  transition: max-height 0.35s ease;
-  cursor: pointer;
-}
-
-.listingsFilter:hover {
-  cursor: pointer;
-}
-
-/**
- * Expanded filter state
- * Increases max-height to show all filter options
- */
-.filterExpanded {
-  cursor: auto;
-  z-index: 20;
-}
-
-.filterExpanded:hover {
-  cursor: auto;
-}
-
-/**
- * Filter header containing search icon and filters text
- */
-.filterHeader {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.filterHeaderLeft {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  font-weight: 600;
-}
-
-.filterExpanded .filterHeader {
-  justify-content: space-between;
-}
-
-/**
- * Filter toggle button (search icon + text)
- */
-.filterToggle {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  background: none;
-  border: none;
-  cursor: pointer;
-  color: var(--color-secondary);
-  font-size: 1rem;
-  font-weight: 500;
-  padding: 0.5rem 1rem;
-  border-radius: 0.5rem;
-  transition: all 0.2s ease;
-  white-space: nowrap;
-}
-
-.filterToggle:hover {
-  background-color: var(--color-accent);
-  color: var(--color-background);
-}
-
-/**
- * Minimize icon for expanded filter
- * Only visible when filter is expanded
- */
-.filterMinimizeIcon {
-  cursor: pointer;
-  transition: transform 0.15s ease, opacity 0.15s ease;
-}
-
-.filterMinimizeIcon:hover {
-  transform: scale(1.1);
-  opacity: 0.75;
-}
-
-/**
- * Container for expanded filter options
- * Only displayed when filterExpanded class is active
- */
-.filterOptions {
-  display: flex;
-  flex-direction: column;
-  gap: 1.25rem;
-  margin-top: 1rem;
-  padding-top: 1rem;
-  border-top: 1px solid rgba(0, 0, 0, 0.05);
-}
-
-/**
- * Individual filter group (search, price range, etc.)
- */
-.filterGroup {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-}
-
-.filterGroup label {
-  font-weight: 600;
-  color: var(--color-secondary);
-  font-size: 0.9rem;
-}
-
-/**
- * Filter input field styling
- */
-.filterInput {
-  padding: 0.75rem;
-  border: 1px solid rgba(0, 0, 0, 0.1);
-  border-radius: 0.5rem;
-  background-color: var(--color-background);
-  color: var(--color-secondary);
-  font-size: 0.95rem;
-  transition: border-color 0.2s ease, box-shadow 0.2s ease;
-}
-
-.filterInput:focus {
-  outline: none;
-  border-color: var(--color-accent);
-  box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.05);
-}
-
-/**
- * Price range filter layout
- * Two input fields (min/max) side by side with a separator
- */
-.priceRangeContainer {
-  display: flex;
-  align-items: flex-end;
-  gap: 0.75rem;
-}
-
-.priceInput {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-  flex: 1;
-}
-
-.priceInput label {
-  font-size: 0.85rem;
-  font-weight: 500;
-}
-
-.priceSeparator {
-  margin-bottom: 0.75rem;
-  font-weight: bold;
-}
-
-/**
- * Filter action buttons container
- * Aligned to the right
- */
-.filterActions {
-  display: flex;
-  gap: 1rem;
-  justify-content: flex-end;
-  margin-top: 1rem;
-}
-
-/**
- * Reset and Apply filter buttons
- */
-.resetButton,
-.applyButton {
-  color: var(--color-secondary);
-  background-color: var(--color-background);
-  padding: 0.75rem 1.25rem;
-  border: none;
-  border-radius: 0.5rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  font-size: 0.95rem;
-}
-
-.resetButton:hover,
-.applyButton:hover {
-  background-color: var(--color-tertiary);
-}
-
-/* ========================================================================== */
 /* LISTINGS GRID */
 /* ========================================================================== */
 
@@ -326,13 +112,13 @@
  */
 .listingImage {
   width: 100%;
-  height: 140px;
+  height: 165px;
   object-fit: cover;
   border-radius: 6px;
 }
 
 .expanded .listingImage {
-  height: 320px;
+  height: 360px;
 }
 
 /**
@@ -371,6 +157,121 @@
   border: 2px solid var(--color-accent);
   border-radius: 8px;
   overflow: hidden;
+}
+
+/* ========================================================================== */
+/* PHOTO VIEWER */
+/* ========================================================================== */
+
+/**
+ * Photo viewer container for listing cards
+ * Relative positioning to contain absolutely positioned arrows
+ */
+.photoViewer {
+  position: relative;
+  width: 100%;
+  height: 165px;
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.expanded .photoViewer {
+  height: 360px;
+}
+
+/**
+ * Photo container that holds the image and arrows
+ * Uses relative positioning for arrow placement
+ */
+.photoContainer {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/**
+ * Photo arrows positioned on the sides
+ * Absolutely positioned over the image
+ */
+.photoArrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background-color: rgba(0, 0, 0, 0.5);
+  color: white;
+  border: none;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 18px;
+  font-weight: bold;
+  z-index: 1;
+  transition: all 0.2s ease;
+  opacity: 0.7;
+}
+
+.photoArrow:hover {
+  background-color: rgba(0, 0, 0, 0.8);
+  opacity: 1;
+  transform: translateY(-50%) scale(1.1);
+}
+
+.photoArrowLeft {
+  left: 8px;
+}
+
+.photoArrowRight {
+  right: 8px;
+}
+
+/**
+ * Photo indicators at the bottom
+ * Small dots showing current photo position
+ */
+.photoIndicators {
+  position: absolute;
+  bottom: 8px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 4px;
+  z-index: 10;
+}
+
+.photoIndicator {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: rgba(255, 255, 255, 0.5);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.photoIndicator:hover {
+  background-color: rgba(255, 255, 255, 0.8);
+}
+
+.photoIndicator.active {
+  background-color: white;
+}
+
+/**
+ * Main photo styling for expanded view
+ * Ensures photo fits within container
+ */
+.mainPhoto {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 6px;
+  display: block;
 }
 
 
