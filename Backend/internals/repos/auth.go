@@ -15,28 +15,32 @@ func NewAuthRepo(db *sql.DB) *AuthRepo {
     }
 }
 
-func (r *AuthRepo) Signup(e [32]byte, p [32]byte) error {
-	_, err := r.db.Exec("INSERT INTO users (email, password) VALUES (?, ?)", e[:], p[:])
+func (r *AuthRepo) Signup(email string, passwordHash string) (int, error) {
+	result, err := r.db.Exec("INSERT INTO users (email, password) VALUES (?, ?)", email, passwordHash)
 	if err != nil {
-		return fmt.Errorf("Signup: %v", err)
+		return 0, fmt.Errorf("Signup: %v", err)
 	}
 
-	return nil
+	insertedID, err := result.LastInsertId()
+	if err != nil {
+		return 0, fmt.Errorf("Signup: failed to read inserted user id: %v", err)
+	}
+
+	return int(insertedID), nil
 }
 
-func (r *AuthRepo) Login(e [32]byte, p [32]byte) ([32]byte, error) {
-	var p2  [32]byte
-	var tmp []byte
+func (r *AuthRepo) Login(email string) (int, string, error) {
+	var userID int
+	var passwordHash string
 
-	row := r.db.QueryRow("SELECT password FROM users WHERE email = ?", e[:])
-	if err := row.Scan(&tmp); err != nil {
+	row := r.db.QueryRow("SELECT user_id, password FROM users WHERE email = ?", email)
+	if err := row.Scan(&userID, &passwordHash); err != nil {
 		if err == sql.ErrNoRows {
-			return p2, fmt.Errorf("Login %q: no such email", e)
+			return 0, "", fmt.Errorf("Login %q: no such email", email)
 		}
-		return p2, fmt.Errorf("Login %q: %v", e, err)
+		return 0, "", fmt.Errorf("Login %q: %v", email, err)
 	}
 
-	copy(p2[:], tmp)
-	return p2, nil
+	return userID, passwordHash, nil
 }
 

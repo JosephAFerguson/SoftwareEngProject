@@ -18,8 +18,28 @@
 .cancelButton {
   padding: 0.5rem 0.75rem;
   border-radius: 0.5rem;
+  color: red;
   border: none;
   cursor: pointer;
+  font-weight: 600;
+}
+
+.editButton:disabled,
+.saveButton:disabled,
+.cancelButton:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.successText {
+  margin: 0 0 1rem 0;
+  color: #1f7a1f;
+  font-weight: 600;
+}
+
+.errorText {
+  margin: 0 0 1rem 0;
+  color: #b42318;
   font-weight: 600;
 }
 
@@ -106,9 +126,11 @@
 .nameInput {
   padding: 0.5rem;
   border-radius: 0.5rem;
+  color: #3a3a3a;
   border: 1px solid rgba(0,0,0,0.12);
   background: var(--color-background);
 }
+
 
 .meta {
   font-size: 0.85rem;
@@ -130,6 +152,13 @@
   flex-direction: column;
   gap: 0.75rem;
 }
+.prefsEdit input {
+  padding: 0.5rem;
+  border-radius: 0.5rem;
+  color: #3a3a3a;
+  border: 1px solid rgba(0,0,0,0.12);
+  background: var(--color-background);
+}
 
 .fieldLabel {
   display: flex;
@@ -144,7 +173,14 @@
 }
 
 .input {
+  width: 100%;
+  box-sizing: border-box;
   padding: 0.5rem;
   border-radius: 0.5rem;
   border: 1px solid rgba(0,0,0,0.12);
+}
+
+.locationAutocomplete {
+  display: block;
+  width: 100%;
 }

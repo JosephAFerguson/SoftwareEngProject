@@ -1,15 +1,102 @@
 import React, { useRef, useState, useEffect } from "react";
 import { Autocomplete } from "@react-google-maps/api";
+import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3";
+import { useAppStore } from "../store/useAppStore";
 import styles from "./Host.module.css";
 
-const libraries: ("places")[] = ["places"];
+const API_URL = "http://localhost:3000/api/v1/rental";
 
+const s3UploadClient = new S3Client({
+  region: import.meta.env.VITE_AWS_REGION || "us-east-1",
+  credentials: {
+    accessKeyId: import.meta.env.VITE_AWS_ACCESS_KEY_ID || "",
+    secretAccessKey: import.meta.env.VITE_AWS_SECRET_ACCESS_KEY || "",
+  },
+});
+
+const sanitizeForKey = (value: string) =>
+  value
+    .toLowerCase()
+    .trim()
+    .replace(/\s+/g, "-")
+    .replace(/[^a-z0-9._-]/g, "");
+
+const uploadPhotoToS3 = async (bucketName: string, objectKey: string, file: File) => {
+  const fileBytes = new Uint8Array(await file.arrayBuffer());
+
+  const command = new PutObjectCommand({
+    Bucket: bucketName,
+    Key: objectKey,
+    Body: fileBytes,
+    ContentType: file.type || "application/octet-stream",
+  });
+
+  await s3UploadClient.send(command);
+  return objectKey;
+};
+
+const postRental = async (data: RentalData) => {
+  const response = await fetch(API_URL, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(data),
+  });
+
+  const text = await response.text();
+
+  let result;
+  try {
+    result = JSON.parse(text);
+  } catch {
+    result = text;
+  }
+
+  if (!response.ok) {
+    throw new Error(
+      typeof result === "string" ? result : result.error || `HTTP ${response.status}`
+    );
+  }
+
+  return result;
+};
+
+type RentalData = {
+  user_id: number;
+  title: string;
+  address: string;
+  price: number;
+  sqft: number | null;
+  roommates: number | null;
+  bednum: number | null;
+  bathnum: number | null;
+  pet_friendly: boolean;
+  available_from?: string;
+  available_to?: string;
+  photos?: string[];
+};
+
+const makeNewRental = (userId: number): RentalData => ({
+  user_id: userId,
+  title: "",
+  address: "123 Main St, Anytown, USA",
+  price: 1200,
+  sqft: 500,
+  roommates: 2,
+  bednum: 2,
+  bathnum: 1,
+  pet_friendly: false,
+});
 
 export default function Host() {
-  const [address, setAddress] = useState("");
-  const [coordinates, setCoordinates] = useState({ lat: 0, lng: 0 });
+  const userId = useAppStore((state) => state.userId);
+  const [newRentalData, setNewRentalData] = useState<RentalData>(makeNewRental(userId ?? 0));
   const [uploadedFiles, setUploadedFiles] = useState<File[]>([]);
   const [previewUrls, setPreviewUrls] = useState<string[]>([]);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState("");
+  const [submitSuccess, setSubmitSuccess] = useState("");
 
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const autocompleteRef = useRef<google.maps.places.Autocomplete | null>(null);
@@ -46,10 +133,70 @@ export default function Host() {
     setPreviewUrls(updatedUrls);
   };
 
-  const handleFormSubmit = (e: React.FormEvent) => {
+  const handleFormSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Submitting:", { address, coordinates, uploadedFiles });
-    // Add your submission logic here
+
+    setSubmitError("");
+    setSubmitSuccess("");
+
+    if (!userId) {
+      setSubmitError("Please log in before creating a listing.");
+      return;
+    }
+
+    setIsSubmitting(true);
+
+    try {
+      const dataToSend: RentalData = {
+        ...newRentalData,
+        user_id: userId,
+      };
+
+      if (!dataToSend.available_from) delete dataToSend.available_from;
+      if (!dataToSend.available_to) delete dataToSend.available_to;
+
+      if (uploadedFiles.length > 0) {
+        const bucketName = import.meta.env.VITE_S3_BUCKET;
+        const accessKeyId = import.meta.env.VITE_AWS_ACCESS_KEY_ID;
+        const secretAccessKey = import.meta.env.VITE_AWS_SECRET_ACCESS_KEY;
+
+        if (!bucketName) {
+          throw new Error("VITE_S3_BUCKET is not configured.");
+        }
+
+        if (!accessKeyId || !secretAccessKey) {
+          throw new Error("AWS credentials are not configured for photo upload.");
+        }
+
+        const listingPrefix = sanitizeForKey(dataToSend.title || "listing");
+        const uploadFolder = `listings/${listingPrefix}-${Date.now()}`;
+
+        const uploadedPhotoKeys = await Promise.all(
+          uploadedFiles.map((file, index) => {
+            const safeFileName = sanitizeForKey(file.name || `photo-${index + 1}.jpg`);
+            const objectKey = `${uploadFolder}/photo-${index + 1}-${safeFileName}`;
+            return uploadPhotoToS3(bucketName, objectKey, file);
+          })
+        );
+
+        dataToSend.photos = uploadedPhotoKeys;
+      } else {
+        delete dataToSend.photos;
+      }
+
+      await postRental(dataToSend);
+
+      setSubmitSuccess("Listing created successfully.");
+      setNewRentalData(makeNewRental(userId));
+
+      previewUrls.forEach(URL.revokeObjectURL);
+      setPreviewUrls([]);
+      setUploadedFiles([]);
+    } catch (error) {
+      setSubmitError((error as Error).message || "Failed to create listing.");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   // Autocomplete Handlers
@@ -66,11 +213,10 @@ export default function Host() {
       return;
     }
 
-    setAddress(place.formatted_address || "");
-    setCoordinates({
-      lat: place.geometry.location.lat(),
-      lng: place.geometry.location.lng(),
-    });
+    setNewRentalData((prev) => ({
+      ...prev,
+      address: place.formatted_address || "",
+    }));
   };
 
   useEffect(() => {
@@ -79,15 +225,35 @@ export default function Host() {
     };
   }, [previewUrls]);
 
+  useEffect(() => {
+    if (!userId) return;
+
+    setNewRentalData((prev) => ({
+      ...prev,
+      user_id: userId,
+    }));
+  }, [userId]);
+
   return (
     <div className={styles.hostContainer}>
       <div className={styles.hostInputs}>
         <h2>Create a Listing</h2>
+        {submitSuccess && <p className={styles.successText}>{submitSuccess}</p>}
+        {submitError && <p className={styles.errorText}>{submitError}</p>}
 
         <form className={styles.form} onSubmit={handleFormSubmit}>
           <div className={styles.formGroup}>
             <label htmlFor="title">Title</label>
-            <input id="title" type="text" placeholder="Cozy room near campus" />
+            <input
+              id="title"
+              type="text"
+              required
+              value={newRentalData.title}
+              onChange={(e) =>
+                setNewRentalData((prev) => ({ ...prev, title: e.target.value }))
+              }
+              placeholder="Cozy room near campus"
+            />
           </div>
 
           <div className={styles.formGroup}>
@@ -98,6 +264,11 @@ export default function Host() {
             >
               <input
                 type="text"
+                required
+                value={newRentalData.address}
+                onChange={(e) =>
+                  setNewRentalData((prev) => ({ ...prev, address: e.target.value }))
+                }
                 placeholder="Enter an address"
                 className={styles.autocompleteInput}
                 style={{
@@ -109,11 +280,140 @@ export default function Host() {
                 }}
               />
             </Autocomplete>
-            <input type="hidden" name="address" value={address} />
           </div>
 
-          <button type="submit" className={styles.submitButton}>
-            Create Listing
+          <div className={styles.formGroup}>
+            <label htmlFor="price">Price ($/month)</label>
+            <input
+              id="price"
+              type="number"
+              min="1"
+              required
+              value={newRentalData.price}
+              onChange={(e) =>
+                setNewRentalData((prev) => ({
+                  ...prev,
+                  price: Number(e.target.value) || 0,
+                }))
+              }
+              placeholder="1200"
+            />
+          </div>
+
+          <div className={styles.formGroup}>
+            <label htmlFor="sqft">Square Footage</label>
+            <input
+              id="sqft"
+              type="number"
+              value={newRentalData.sqft || ""}
+              onChange={(e) =>
+                setNewRentalData((prev) => ({
+                  ...prev,
+                  sqft: e.target.value ? Number(e.target.value) : null,
+                }))
+              }
+              placeholder="500"
+            />
+          </div>
+
+          <div className={styles.formGroup}>
+            <label htmlFor="roommates">Number of Roommates</label>
+            <input
+              id="roommates"
+              type="number"
+              value={newRentalData.roommates || ""}
+              onChange={(e) =>
+                setNewRentalData((prev) => ({
+                  ...prev,
+                  roommates: e.target.value ? Number(e.target.value) : null,
+                }))
+              }
+              placeholder="2"
+            />
+          </div>
+
+          <div className={styles.formGroup}>
+            <label htmlFor="bednum">Number of Beds</label>
+            <input
+              id="bednum"
+              type="number"
+              value={newRentalData.bednum || ""}
+              onChange={(e) =>
+                setNewRentalData((prev) => ({
+                  ...prev,
+                  bednum: e.target.value ? Number(e.target.value) : null,
+                }))
+              }
+              placeholder="2"
+            />
+          </div>
+
+          <div className={styles.formGroup}>
+            <label htmlFor="bathnum">Number of Baths</label>
+            <input
+              id="bathnum"
+              type="number"
+              step="0.5"
+              value={newRentalData.bathnum || ""}
+              onChange={(e) =>
+                setNewRentalData((prev) => ({
+                  ...prev,
+                  bathnum: e.target.value ? Number(e.target.value) : null,
+                }))
+              }
+              placeholder="1"
+            />
+          </div>
+
+          <div className={styles.formGroup}>
+            <label htmlFor="pet_friendly">
+              <input
+                id="pet_friendly"
+                type="checkbox"
+                checked={newRentalData.pet_friendly}
+                onChange={(e) =>
+                  setNewRentalData((prev) => ({
+                    ...prev,
+                    pet_friendly: e.target.checked,
+                  }))
+                }
+              />
+              Pet Friendly
+            </label>
+          </div>
+
+          <div className={styles.formGroup}>
+            <label htmlFor="available_from">Available From</label>
+            <input
+              id="available_from"
+              type="date"
+              value={newRentalData.available_from || ""}
+              onChange={(e) =>
+                setNewRentalData((prev) => ({
+                  ...prev,
+                  available_from: e.target.value,
+                }))
+              }
+            />
+          </div>
+
+          <div className={styles.formGroup}>
+            <label htmlFor="available_to">Available To</label>
+            <input
+              id="available_to"
+              type="date"
+              value={newRentalData.available_to || ""}
+              onChange={(e) =>
+                setNewRentalData((prev) => ({
+                  ...prev,
+                  available_to: e.target.value,
+                }))
+              }
+            />
+          </div>
+
+          <button type="submit" className={styles.submitButton} disabled={isSubmitting}>
+            {isSubmitting ? "Creating Listing..." : "Create Listing"}
           </button>
         </form>
       </div>

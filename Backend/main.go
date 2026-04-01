@@ -5,6 +5,7 @@ import (
 	"database/sql"
 
 	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v2/middleware/cors"
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/go-playground/validator/v10"
 
@@ -19,6 +20,12 @@ const PORT = "3000"
 // could use refactoring asp. maybe move all non-fiber components to an app.go?
 func main() {
 	app := fiber.New()
+
+	app.Use(cors.New(cors.Config{
+		AllowOrigins: "http://localhost:5173",
+		AllowMethods: "GET,POST,PUT,DELETE,OPTIONS",
+		AllowHeaders: "Origin, Content-Type, Accept, Authorization",
+	}))
 
 	api := app.Group("/api")
 
@@ -56,6 +63,18 @@ func main() {
 	rentalService := services.NewRentalService(rentalRepo)
 	rentalHandler := handlers.NewRentalHandler(validate, rentalService)
 	routes.RentalRoutes(v1, rentalHandler)
+
+	//Profile Group
+	profileRepo := repos.NewProfileRepo(db)
+	profileService := services.NewProfileService(profileRepo)
+	profileHandler := handlers.NewProfileHandler(validate, profileService)
+	routes.ProfileRoutes(v1, profileHandler)
+
+	//Preference Group
+	preferenceRepo := repos.NewPreferenceRepo(db)
+	preferenceService := services.NewPreferenceService(preferenceRepo)
+	preferenceHandler := handlers.NewPreferenceHandler(validate, preferenceService)
+	routes.PreferenceRoutes(v1, preferenceHandler)
 
 	log.Fatal(app.Listen(":" + PORT))
 }
