@@ -21,7 +21,7 @@ export default function Login() {
     setErrorMessage("")
 
     if (!UC_EMAIL_REGEX.test(email.trim())) {
-      setErrorMessage("Please use your UC email address (@mail.uc.edu or @uc.edu).")
+      setErrorMessage("Please use your UC email address (@mail.uc.edu or @ucmail.uc.edu).")
       return
     }
 
