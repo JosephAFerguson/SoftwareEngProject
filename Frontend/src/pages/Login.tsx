@@ -4,6 +4,7 @@ import { useAppStore } from "../store/useAppStore"
 import styles from "./Login.module.css"
 
 const LOGIN_API_URL = "http://localhost:3000/api/v1/auth/login"
+const UC_EMAIL_REGEX = /^[a-zA-Z0-9._%+-]+@(mail\.uc\.edu|uc\.edu)$/
 
 export default function Login() {
   const [email, setEmail] = useState("")
@@ -19,8 +20,12 @@ export default function Login() {
     e.preventDefault()
     setErrorMessage("")
 
-    setIsSubmitting(true)
+    if (!UC_EMAIL_REGEX.test(email.trim())) {
+      setErrorMessage("Please use your UC email address (@mail.uc.edu or @ucmail.uc.edu).")
+      return
+    }
 
+    setIsSubmitting(true)
     try {
       const response = await fetch(LOGIN_API_URL, {
         method: "POST",
@@ -32,18 +37,15 @@ export default function Login() {
           password,
         }),
       })
-
       if (!response.ok) {
         const body = await response.json().catch(() => ({}))
         throw new Error(body?.error || "Failed to log in.")
       }
-
       const body = await response.json().catch(() => ({}))
       const userId = typeof body?.user_id === "number" ? body.user_id : null
       if (!userId) {
         throw new Error("Login succeeded but no user_id was returned.")
       }
-
       setSignedIn(true)
       setUserId(userId)
       navigate("/")
@@ -56,32 +58,50 @@ export default function Login() {
 
   return (
     <div className={styles.loginContainer}>
-      <h1 className={styles.header}>Login</h1>
-      {errorMessage && <p className={styles.errorText}>{errorMessage}</p>}
+      <div className={styles.card}>
+        <div className={styles.logoRow}>
+          <span className={styles.logoIcon}>🏠</span>
+          <span className={styles.logoText}>SubleasesInc</span>
+        </div>
+        <h1 className={styles.header}>Welcome back</h1>
+        <p className={styles.subheader}>Sign in with your UC email</p>
 
-      <form className={styles.form} onSubmit={handleSubmit}>
-        <input
-          type="email"
-          placeholder="Email"
-          value={email}
-          onChange={e => setEmail(e.target.value)}
-          required
-        />
+        {errorMessage && <p className={styles.errorText}>{errorMessage}</p>}
 
-        <input
-          type="password"
-          placeholder="Password"
-          value={password}
-          onChange={e => setPassword(e.target.value)}
-          required
-        />
+        <form className={styles.form} onSubmit={handleSubmit}>
+          <div className={styles.fieldGroup}>
+            <label className={styles.label}>UC Email</label>
+            <input
+              type="email"
+              placeholder="m12345@mail.uc.edu"
+              value={email}
+              onChange={e => setEmail(e.target.value)}
+              className={styles.input}
+              required
+            />
+          </div>
 
-        <button type="submit" disabled={isSubmitting}>
-          {isSubmitting ? "Logging In..." : "Login"}
-        </button>
-      </form>
+          <div className={styles.fieldGroup}>
+            <label className={styles.label}>Password</label>
+            <input
+              type="password"
+              placeholder="••••••••"
+              value={password}
+              onChange={e => setPassword(e.target.value)}
+              className={styles.input}
+              required
+            />
+          </div>
 
-      <p>New to SubleasesInc? <a href="/signup">Sign up</a></p>
+          <button type="submit" disabled={isSubmitting} className={styles.submitBtn}>
+            {isSubmitting ? "Logging In..." : "Log In"}
+          </button>
+        </form>
+
+        <p className={styles.switchText}>
+          New to SubleasesInc? <a href="/signup" className={styles.link}>Sign up</a>
+        </p>
+      </div>
     </div>
   )
 }
