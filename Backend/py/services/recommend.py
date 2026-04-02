@@ -1,29 +1,31 @@
-import torch
+"""Compatibility wrapper for the logistic-regression recommender."""
 
-# Load model ONCE
-model = torch.load("model/recommender.pt")
-model.eval()
+from __future__ import annotations
 
-def recommend_listings(user_preferences: dict):
-    """
-    user_preferences example:
-    {
-      "location": "Boston",
-      "price_max": 1200,
-      "bedrooms": 2
-    }
-    """
+from collections.abc import Mapping, Sequence
+from typing import Any
 
-    # Example: convert inputs to tensor (simplified)
-    features = torch.tensor([
-        user_preferences.get("price_max", 0),
-        user_preferences.get("bedrooms", 0)
-    ], dtype=torch.float32)
+try:
+	from .log_regression import DEFAULT_MODEL, recommend_listings as _recommend_listings
+except ImportError:
+	from log_regression import DEFAULT_MODEL, recommend_listings as _recommend_listings
 
-    with torch.no_grad():
-        scores = model(features)
 
-    # Dummy return for now
-    return {
-        "recommended_listing_ids": [3, 7, 12]
-    }
+model = DEFAULT_MODEL
+
+
+def recommend_listings(
+	user_preferences: Mapping[str, Any],
+	candidate_listings: Sequence[Mapping[str, Any]] | None = None,
+	top_n: int = 5,
+) -> list[dict[str, Any]]:
+	"""Rank listings with the shared logistic-regression model.
+
+	The caller should pass the available listings to score. Returning a list of
+	ranked listings makes it easy to render 3-5 recommendations in the UI.
+	"""
+
+	if candidate_listings is None:
+		return []
+
+	return _recommend_listings(user_preferences, candidate_listings, top_n=top_n, model=model)

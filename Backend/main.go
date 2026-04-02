@@ -76,6 +76,12 @@ func main() {
 	preferenceHandler := handlers.NewPreferenceHandler(validate, preferenceService)
 	routes.PreferenceRoutes(v1, preferenceHandler)
 
+	//Recommendation Group
+	recommendationRepo := repos.NewRecommendationRepo(db)
+	recommendationService := services.NewRecommendationService(preferenceRepo, rentalRepo, recommendationRepo)
+	recommendationHandler := handlers.NewRecommendationHandler(recommendationService)
+	routes.RecommendationRoutes(v1, recommendationHandler)
+
 	log.Fatal(app.Listen(":" + PORT))
 }
 

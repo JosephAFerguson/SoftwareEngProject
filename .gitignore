@@ -3,3 +3,6 @@
 *.pdf
 *.xlsx
 
+#venv
+*.conda
+
