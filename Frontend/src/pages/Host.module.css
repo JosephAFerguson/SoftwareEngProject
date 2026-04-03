@@ -226,3 +226,148 @@ gmp-place-autocomplete-element::part(input) {
   display: none;
 }
 
+.fullscreenContainer {
+  color: var(--color-secondary);
+  padding: 2rem;
+  min-height: calc(100vh - 80px);
+  display: flex;
+}
+
+.fullscreenCard {
+  width: min(1100px, 100%);
+  margin: 0 auto;
+  background: var(--color-background);
+  border-radius: 1rem;
+  box-shadow: 0 14px 38px rgba(0, 0, 0, 0.16);
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.fullscreenSubtitle {
+  margin: 0;
+  font-size: 1.35rem;
+  font-weight: 700;
+}
+
+.fullscreenHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+}
+
+.fullscreenHeaderActions {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.fullscreenEditForm {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(240px, 1fr));
+  gap: 1rem;
+}
+
+.fullscreenEditActions {
+  grid-column: 1 / -1;
+  display: flex;
+  gap: 0.75rem;
+  justify-content: flex-end;
+}
+
+.cancelButton {
+  margin-top: 0.5rem;
+  padding: 0.9rem;
+  font-size: 1rem;
+  font-weight: 600;
+  border-radius: 0.6rem;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+  background-color: transparent;
+  color: var(--color-secondary);
+}
+
+.cancelButton:hover {
+  background-color: rgba(0, 0, 0, 0.05);
+}
+
+.fullscreenPhotoContainer {
+  width: 100%;
+  min-height: 420px;
+  border-radius: 0.75rem;
+  overflow: hidden;
+  background: rgba(0, 0, 0, 0.05);
+  display: grid;
+  grid-template-columns: 52px 1fr 52px;
+  align-items: center;
+}
+
+.fullscreenPhoto {
+  width: 100%;
+  height: 100%;
+  min-height: 420px;
+  object-fit: cover;
+}
+
+.fullscreenPhotoNav {
+  border: none;
+  background: rgba(0, 0, 0, 0.38);
+  color: white;
+  height: 100%;
+  font-size: 2rem;
+  cursor: pointer;
+}
+
+.fullscreenPhotoNav:hover {
+  background: rgba(0, 0, 0, 0.54);
+}
+
+.noPhoto {
+  min-height: 240px;
+  border-radius: 0.75rem;
+  border: 2px dashed rgba(0, 0, 0, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  opacity: 0.7;
+}
+
+.fullscreenDetails {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(240px, 1fr));
+  gap: 0.75rem 1.5rem;
+}
+
+.fullscreenDetails p {
+  margin: 0;
+}
+
+@media (max-width: 900px) {
+  .fullscreenContainer {
+    padding: 1rem;
+  }
+
+  .fullscreenCard {
+    padding: 1rem;
+  }
+
+  .fullscreenPhotoContainer {
+    min-height: 260px;
+    grid-template-columns: 42px 1fr 42px;
+  }
+
+  .fullscreenPhoto {
+    min-height: 260px;
+  }
+
+  .fullscreenDetails {
+    grid-template-columns: 1fr;
+  }
+
+  .fullscreenEditForm {
+    grid-template-columns: 1fr;
+  }
+}
+

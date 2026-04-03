@@ -1,12 +1,14 @@
 package handlers
 
 import (
+	"errors"
 	"strconv"
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/go-playground/validator/v10"
 
 	"github.com/JosephAFerguson/SoftwareEngProject/internals/models"
+	"github.com/JosephAFerguson/SoftwareEngProject/internals/repos"
 	"github.com/JosephAFerguson/SoftwareEngProject/internals/services"
 )
 
@@ -42,15 +44,31 @@ func (h *ProfileHandler) Update(c *fiber.Ctx) error {
 	var profile models.UserProfile
 
 	if err := c.BodyParser(&profile); err != nil {
-		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": err.Error()})
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+			"error": "Invalid request body",
+			"details": err.Error(),
+		})
 	}
 
 	if err := h.validate.Struct(profile); err != nil {
-		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": err.Error()})
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+			"error": "Validation failed",
+			"details": parseValidationErrors(err),
+		})
 	}
 
 	if err := h.service.Update(profile); err != nil {
-		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": err.Error()})
+		if errors.Is(err, repos.ErrUserNotFound) {
+			return c.Status(fiber.StatusNotFound).JSON(fiber.Map{
+				"error": "User not found",
+				"details": "Cannot update the profile for a user that does not exist",
+			})
+		}
+
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+			"error": "Profile update failed",
+			"details": "An error occurred while updating the profile. Please try again later",
+		})
 	}
 
 	return c.Status(fiber.StatusOK).JSON(fiber.Map{"message": "Profile updated successfully"})

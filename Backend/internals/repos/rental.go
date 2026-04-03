@@ -3,9 +3,11 @@ package repos
 import (
 	"database/sql"
 	"encoding/json"
+	"errors"
 	"fmt"
 
 	"github.com/JosephAFerguson/SoftwareEngProject/internals/models"
+	"github.com/go-sql-driver/mysql"
 )
 
 type RentalRepo struct {
@@ -34,7 +36,43 @@ func (r *RentalRepo) Post(rental models.Rental) error {
 						rental.UserID, rental.Title, rental.Address, rental.Price, rental.Sqft, rental.Roommates,
 						rental.Bednum, rental.Bathnum, rental.PetFriendly, rental.AvailableFrom, rental.AvailableTo, photosJSON)
 	if err != nil {
-		return fmt.Errorf("Post rental: %v", err)
+		var mysqlErr *mysql.MySQLError
+		if errors.As(err, &mysqlErr) && mysqlErr.Number == 1452 {
+			return ErrUserNotFound
+		}
+
+		return fmt.Errorf("post rental: %w", err)
+	}
+
+	return nil
+}
+
+func (r *RentalRepo) Update(rental models.Rental) error {
+	var photosJSON []byte
+	if rental.Photos != nil {
+		var err error
+		photosJSON, err = json.Marshal(rental.Photos)
+		if err != nil {
+			return fmt.Errorf("Update rental %d: failed to marshal photos: %w", rental.ListingID, err)
+		}
+	}
+
+	result, err := r.db.Exec(`UPDATE listings
+			SET title = ?, address = ?, price = ?, sqft = ?, roommates = ?, bednum = ?, bathnum = ?, pet_friendly = ?, available_from = ?, available_to = ?, photos = ?
+			WHERE listing_id = ? AND user_id = ?`,
+		rental.Title, rental.Address, rental.Price, rental.Sqft, rental.Roommates, rental.Bednum, rental.Bathnum,
+		rental.PetFriendly, rental.AvailableFrom, rental.AvailableTo, photosJSON, rental.ListingID, rental.UserID)
+	if err != nil {
+		return fmt.Errorf("update rental %d for user %d: %w", rental.ListingID, rental.UserID, err)
+	}
+
+	affected, affErr := result.RowsAffected()
+	if affErr != nil {
+		return fmt.Errorf("update rental %d for user %d: %w", rental.ListingID, rental.UserID, affErr)
+	}
+
+	if affected == 0 {
+		return ErrListingNotFound
 	}
 
 	return nil

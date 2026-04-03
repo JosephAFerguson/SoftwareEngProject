@@ -37,15 +37,15 @@ func (r *ProfileRepo) Update(profile models.UserProfile) error {
 		profile.UserID,
 	)
 	if err != nil {
-		return fmt.Errorf("Update Profile for user %d: %v", profile.UserID, err)
+		return fmt.Errorf("update profile for user %d: %w", profile.UserID, err)
 	}
 
 	affected, affErr := result.RowsAffected()
 	if affErr != nil {
-		return fmt.Errorf("Update Profile for user %d: %v", profile.UserID, affErr)
+		return fmt.Errorf("update profile for user %d: %w", profile.UserID, affErr)
 	}
 	if affected == 0 {
-		return fmt.Errorf("Update Profile for user %d: not found", profile.UserID)
+		return ErrUserNotFound
 	}
 
 	return nil

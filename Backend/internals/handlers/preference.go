@@ -1,12 +1,14 @@
 package handlers
 
 import (
+	"errors"
 	"strconv"
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/go-playground/validator/v10"
 
 	"github.com/JosephAFerguson/SoftwareEngProject/internals/models"
+	"github.com/JosephAFerguson/SoftwareEngProject/internals/repos"
 	"github.com/JosephAFerguson/SoftwareEngProject/internals/services"
 )
 
@@ -42,19 +44,38 @@ func (h *PreferenceHandler) Upsert(c *fiber.Ctx) error {
 	var pref models.Preference
 
 	if err := c.BodyParser(&pref); err != nil {
-		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": err.Error()})
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+			"error": "Invalid request body",
+			"details": err.Error(),
+		})
 	}
 
 	if err := h.validate.Struct(pref); err != nil {
-		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": err.Error()})
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+			"error": "Validation failed",
+			"details": parseValidationErrors(err),
+		})
 	}
 
 	if pref.BudgetMin != nil && pref.BudgetMax != nil && *pref.BudgetMin > *pref.BudgetMax {
-		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "budget_min cannot be greater than budget_max"})
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+			"error": "Validation failed",
+			"details": fiber.Map{"budget_min": "budget_min cannot be greater than budget_max"},
+		})
 	}
 
 	if err := h.service.Upsert(pref); err != nil {
-		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": err.Error()})
+		if errors.Is(err, repos.ErrUserNotFound) {
+			return c.Status(fiber.StatusNotFound).JSON(fiber.Map{
+				"error": "User not found",
+				"details": "Cannot save preferences for a user that does not exist",
+			})
+		}
+
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+			"error": "Preference save failed",
+			"details": "An error occurred while saving preferences. Please try again later",
+		})
 	}
 
 	return c.Status(fiber.StatusOK).JSON(fiber.Map{"message": "Preferences saved successfully"})

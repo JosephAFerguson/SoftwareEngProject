@@ -4,6 +4,7 @@ import Nav from "./components/Nav"
 import Find from "./pages/Find"
 import Host from "./pages/Host"
 import Profile from "./pages/Profile"
+import Inbox from "./pages/inbox"
 import Login from "./pages/Login"
 import Signup from "./pages/SignUp"
 
@@ -19,6 +20,7 @@ function Layout() {
           <Route path="/" element={<Find />} />
           <Route path="/host" element={<Host />} />
           <Route path="/profile" element={<Profile />} />
+          <Route path="/inbox" element={<Inbox />} />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
         </Routes>

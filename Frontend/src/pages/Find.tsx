@@ -9,6 +9,7 @@ import { FiMinimize2 } from "react-icons/fi";
 import { S3Client, GetObjectCommand } from "@aws-sdk/client-s3";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 import pic1 from "../../public/unit-1/photo1.png";
+import { useAppStore } from "../store/useAppStore";
 
 // ============================================================================
 // TYPES
@@ -33,6 +34,23 @@ type Listing = {
   available_from?: string;
   available_to?: string;
   photos?: string[];
+  recommendation_score?: number;
+};
+
+type RentalApiResponse = {
+  listing_id?: number;
+  title?: string;
+  price?: number;
+  address?: string;
+  sqft?: number;
+  roommates?: number;
+  bednum?: number;
+  bathnum?: number;
+  pet_friendly?: boolean;
+  available_from?: string;
+  available_to?: string;
+  photos?: string[];
+  recommendation_score?: number;
 };
 
 // ============================================================================
@@ -43,6 +61,7 @@ type Listing = {
  * Backend API endpoint used for rental lookup
  */
 const API_URL = "http://localhost:3000/api/v1/rental";
+const RECOMMENDATION_API_URL = "http://localhost:3000/api/v1/recommendations";
 
 /**
  * Google Map container styling
@@ -123,6 +142,42 @@ async function getS3PhotoUrl(
   }
 }
 
+async function mapRentalToListing(rental: RentalApiResponse, index: number): Promise<Listing> {
+  let photoUrls: string[] = [];
+
+  if (rental.photos && Array.isArray(rental.photos)) {
+    console.log(`[S3] Processing ${rental.photos.length} photos for listing ${rental.listing_id}:`, rental.photos);
+    photoUrls = await Promise.all(
+      rental.photos.map(async (photoKey: string) => {
+        const bucketName = import.meta.env.VITE_S3_BUCKET || "sublease-photos";
+        return await getS3PhotoUrl(bucketName, photoKey);
+      })
+    );
+
+    photoUrls = photoUrls.filter((url) => url.length > 0);
+    console.log(`[S3] Generated ${photoUrls.length} valid presigned URLs for listing ${rental.listing_id}`);
+  }
+
+  return {
+    id: rental.listing_id || index + 1,
+    title: rental.title || `Rental at ${rental.address}`,
+    price: Number(rental.price || 0),
+    address: rental.address || "",
+    lat: 39.1310 + (Math.random() - 0.5) * 0.01,
+    lng: -84.5165 + (Math.random() - 0.5) * 0.01,
+    imageUrl: photoUrls.length > 0 ? photoUrls[0] : "",
+    sqft: rental.sqft,
+    roommates: rental.roommates,
+    bednum: rental.bednum,
+    bathnum: rental.bathnum,
+    pet_friendly: rental.pet_friendly,
+    available_from: rental.available_from,
+    available_to: rental.available_to,
+    photos: photoUrls,
+    recommendation_score: rental.recommendation_score,
+  };
+}
+
 // ============================================================================
 // COMPONENT
 // ============================================================================
@@ -140,12 +195,15 @@ export default function Find() {
   // STATE
   // ========================================================================
 
+  const signedIn = useAppStore((state) => state.signedIn);
+  const userId = useAppStore((state) => state.userId);
   const [selectedListing, setSelectedListing] = useState<Listing | null>(null);
   const [lockedListingId, setLockedListingId] = useState<number | null>(null);
   const mapRef = useRef<google.maps.Map | null>(null);
   const [zoom, setZoom] = useState(14);
 
   const [allListings, setAllListings] = useState<Listing[]>([]);
+  const [recommendedListingIds, setRecommendedListingIds] = useState<number[]>([]);
   const [listingPhotoIndices, setListingPhotoIndices] = useState<Map<number, number>>(new Map());
 
   // ========================================================================
@@ -155,6 +213,15 @@ export default function Find() {
   useEffect(() => {
     fetchAllListings();
   }, []);
+
+  useEffect(() => {
+    if (!signedIn || !userId) {
+      setRecommendedListingIds([]);
+      return;
+    }
+
+    fetchRecommendedListings(userId);
+  }, [signedIn, userId]);
 
   // ========================================================================
   // API CALLS
@@ -172,47 +239,47 @@ export default function Find() {
       const data = await response.json();
       console.log("[DEBUG] API response data:", data);
       const listings: Listing[] = await Promise.all(
-        data.rentals.map(async (rental: any, index: number) => {
-          // Generate S3 presigned URLs for photos
-          let photoUrls: string[] = [];
-          if (rental.photos && Array.isArray(rental.photos)) {
-            console.log(`[S3] Processing ${rental.photos.length} photos for listing ${rental.listing_id}:`, rental.photos);
-            photoUrls = await Promise.all(
-              rental.photos.map(async (photoKey: string) => {
-                // Assume photos are stored with bucket name from env
-                const bucketName = import.meta.env.VITE_S3_BUCKET || "sublease-photos";
-                return await getS3PhotoUrl(bucketName, photoKey);
-              })
-            );
-            // Filter out any empty URLs that failed to generate
-            photoUrls = photoUrls.filter(url => url.length > 0);
-            console.log(`[S3] Generated ${photoUrls.length} valid presigned URLs for listing ${rental.listing_id}`);
-          }
-
-          return {
-            id: rental.listing_id || index + 1,
-            title: rental.title || `Rental at ${rental.address}`,
-            price: Number(rental.price || 0),
-            address: rental.address || "",
-            lat: 39.1310 + (Math.random() - 0.5) * 0.01,
-            lng: -84.5165 + (Math.random() - 0.5) * 0.01,
-            imageUrl: photoUrls.length > 0 ? photoUrls[0] : "",
-            sqft: rental.sqft,
-            roommates: rental.roommates,
-            bednum: rental.bednum,
-            bathnum: rental.bathnum,
-            pet_friendly: rental.pet_friendly,
-            available_from: rental.available_from,
-            available_to: rental.available_to,
-            photos: photoUrls,
-          };
-        })
+        data.rentals.map((rental: RentalApiResponse, index: number) => mapRentalToListing(rental, index))
       );
 
       setAllListings(listings);
     } catch (error) {
       console.error("Error fetching listings:", error);
       setAllListings([]);
+    }
+  };
+
+  const fetchRecommendedListings = async (activeUserId: number) => {
+    try {
+      const response = await fetch(
+        `${RECOMMENDATION_API_URL}?user_id=${activeUserId}&top_n=5&persist=false`
+      );
+
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        const errorMsg = errorData.error || `Recommendations unavailable (${response.status})`;
+        console.warn(`Recommendation fetch failed: ${errorMsg}`);
+        setRecommendedListingIds([]);
+        return;
+      }
+
+      const data = await response.json();
+      if (!data.recommendations || !Array.isArray(data.recommendations)) {
+        console.warn("Recommendations response missing or invalid");
+        setRecommendedListingIds([]);
+        return;
+      }
+
+      const recommendationIds = Array.isArray(data.recommendations)
+        ? data.recommendations
+            .map((listing: RentalApiResponse) => listing.listing_id)
+            .filter((listingId: number | undefined): listingId is number => typeof listingId === "number")
+        : [];
+
+      setRecommendedListingIds(recommendationIds);
+    } catch (error) {
+      console.error("Error fetching recommendations:", error);
+      setRecommendedListingIds([]);
     }
   };
 
@@ -303,7 +370,14 @@ export default function Find() {
     setListingPhotoIndex(listingId, prevIndex);
   };
 
-  const displayedListings = allListings;
+  const recommendedSet = new Set(recommendedListingIds);
+  const uniqueListings = allListings.filter(
+    (l, idx, arr) => arr.findIndex((x) => x.id === l.id) === idx
+  );
+  const displayedListings = [
+    ...uniqueListings.filter((l) => recommendedSet.has(l.id)),
+    ...uniqueListings.filter((l) => !recommendedSet.has(l.id)),
+  ];
 
   // ========================================================================
   // RENDER
@@ -327,6 +401,7 @@ export default function Find() {
               key={listing.id}
               id={`listing-${listing.id}`}
               className={`${styles.listingCard}
+                ${recommendedListingIds.includes(listing.id) ? styles.recommended : ""}
                 ${selectedListing?.id === listing.id ? styles.active : ""}
                 ${lockedListingId === listing.id ? styles.expanded : ""}
               `}

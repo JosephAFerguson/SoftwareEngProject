@@ -2,9 +2,11 @@ package repos
 
 import (
 	"database/sql"
+	"errors"
 	"fmt"
 
 	"github.com/JosephAFerguson/SoftwareEngProject/internals/models"
+	"github.com/go-sql-driver/mysql"
 )
 
 type PreferenceRepo struct {
@@ -56,13 +58,18 @@ func (r *PreferenceRepo) Upsert(pref models.Preference) error {
 			pref.PreferredBathnum,
 		)
 		if insertErr != nil {
-			return fmt.Errorf("Insert Preference for user %d: %v", pref.UserID, insertErr)
+			var mysqlErr *mysql.MySQLError
+			if errors.As(insertErr, &mysqlErr) && mysqlErr.Number == 1452 {
+				return ErrUserNotFound
+			}
+
+			return fmt.Errorf("insert preference for user %d: %w", pref.UserID, insertErr)
 		}
 		return nil
 	}
 
 	if err != nil {
-		return fmt.Errorf("Upsert Preference for user %d: %v", pref.UserID, err)
+		return fmt.Errorf("upsert preference for user %d: %w", pref.UserID, err)
 	}
 
 	_, updateErr := r.db.Exec(`UPDATE preferences
@@ -77,7 +84,7 @@ func (r *PreferenceRepo) Upsert(pref models.Preference) error {
 		existingPreferenceID,
 	)
 	if updateErr != nil {
-		return fmt.Errorf("Update Preference for user %d: %v", pref.UserID, updateErr)
+		return fmt.Errorf("update preference for user %d: %w", pref.UserID, updateErr)
 	}
 
 	return nil
