@@ -35,6 +35,10 @@ func (s *RentalService) Post(rental models.Rental) error {
 	return err
 }
 
+func (s *RentalService) Update(rental models.Rental) error {
+	return s.repo.Update(rental)
+}
+
 func (s *RentalService) Get(address string) (models.Rental, error) {
 	re, err := s.repo.Get(address)
 

@@ -31,6 +31,14 @@ CREATE TABLE `reviews` (
   `review_text` VARCHAR(500)
 );
 
+CREATE TABLE `messages` (
+  `message_id` INT AUTO_INCREMENT PRIMARY KEY,
+  `sender_id` INT NOT NULL,
+  `receiver_id` INT NOT NULL,
+  `content` TEXT NOT NULL,
+  `timestamp` TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
 CREATE TABLE `preferences` (
   `preference_id` INT AUTO_INCREMENT PRIMARY KEY,
   `user_id` INT NOT NULL,

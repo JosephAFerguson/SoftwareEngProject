@@ -7,6 +7,7 @@ import styles from "./Profile.module.css"
 
 const PREFERENCES_API_URL = "http://localhost:3000/api/v1/preferences"
 const PROFILE_API_URL = "http://localhost:3000/api/v1/profile"
+const RECOMMENDATIONS_API_URL = "http://localhost:3000/api/v1/recommendations"
 
 const s3Client = new S3Client({
   region: import.meta.env.VITE_AWS_REGION || "us-east-1",
@@ -90,6 +91,7 @@ type UserProfile = {
 }
 
 const fetchProfile = async (userId: number): Promise<UserProfile | null> => {
+  console.log(`Fetching profile for user_id=${userId} from ${PROFILE_API_URL}`) 
   const response = await fetch(`${PROFILE_API_URL}?user_id=${userId}`)
 
   if (response.status === 404) {
@@ -110,15 +112,24 @@ const fetchProfile = async (userId: number): Promise<UserProfile | null> => {
 }
 
 const saveProfile = async (profile: UserProfile) => {
+  console.log("[saveProfile] Sending PUT request to", PROFILE_API_URL, "with profile:", profile)
   const response = await fetch(PROFILE_API_URL, {
     method: "PUT",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(profile),
   })
 
-  const body = await response.json().catch(() => ({}))
+  console.log("[saveProfile] Response status:", response.status, "ok:", response.ok)
+  const body = await response.json().catch((e) => {
+    console.error("[saveProfile] Failed to parse JSON:", e)
+    return {}
+  })
+  console.log("[saveProfile] Response body:", body)
+
   if (!response.ok) {
-    throw new Error(body?.error || `HTTP ${response.status}`)
+    throw new Error(
+      body?.details ? `${body?.error || `HTTP ${response.status}`}: ${body.details}` : (body?.error || `HTTP ${response.status}`)
+    )
   }
 }
 
@@ -158,11 +169,31 @@ const savePreferences = async (prefs: Preferences) => {
     preferred_bathnum: parseNullableFloat(prefs.preferred_bathnum),
   }
 
+  console.log("[savePreferences] Sending PUT request to", PREFERENCES_API_URL, "with payload:", payload)
   const response = await fetch(PREFERENCES_API_URL, {
     method: "PUT",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(payload),
   })
+
+  console.log("[savePreferences] Response status:", response.status, "ok:", response.ok)
+  const body = await response.json().catch((e) => {
+    console.error("[savePreferences] Failed to parse JSON:", e)
+    return {}
+  })
+  console.log("[savePreferences] Response body:", body)
+
+  if (!response.ok) {
+    throw new Error(
+      body?.details ? `${body?.error || `HTTP ${response.status}`}: ${body.details}` : (body?.error || `HTTP ${response.status}`)
+    )
+  }
+}
+
+const refreshRecommendations = async (userId: number) => {
+  const response = await fetch(
+    `${RECOMMENDATIONS_API_URL}?user_id=${userId}&top_n=5&persist=true`
+  )
 
   const body = await response.json().catch(() => ({}))
   if (!response.ok) {
@@ -203,6 +234,10 @@ export default function Profile() {
       setPrefsStatusError("Please log in to view your profile.")
       return
     }
+
+    const empty = makeEmptyPreferences(userId)
+    setPreferences(empty)
+    setTempPrefs(empty)
 
     const loadProfileAndPreferences = async () => {
       setIsLoadingPrefs(true)
@@ -265,12 +300,28 @@ export default function Profile() {
   }
 
   const saveEdit = async () => {
+    console.log("[Profile] saveEdit called with userId:", userId)
+    if (!userId) {
+      setPrefsStatusError("Please log in to save your profile.")
+      return
+    }
+
     if (
       tempPrefs.budget_min.trim() !== "" &&
       tempPrefs.budget_max.trim() !== "" &&
       Number(tempPrefs.budget_min) > Number(tempPrefs.budget_max)
     ) {
       setPrefsStatusError("Budget min cannot be greater than budget max.")
+      return
+    }
+
+    // Check if profile actually changed
+    const profileChanged = tempName.trim() !== displayName || tempAvatarFile !== null
+    // Check if preferences actually changed
+    const prefsChanged = JSON.stringify(tempPrefs) !== JSON.stringify(preferences)
+
+    if (!profileChanged && !prefsChanged) {
+      setPrefsStatusError("No changes to save.")
       return
     }
 
@@ -301,14 +352,34 @@ export default function Profile() {
         nextProfilePhotoKey = await uploadProfilePhotoToS3(bucketName, objectKey, tempAvatarFile)
       }
 
-      await Promise.all([
-        saveProfile({
-          user_id: userId ?? 0,
-          name: tempName.trim(),
-          profile_photo: nextProfilePhotoKey || undefined,
-        }),
-        savePreferences(tempPrefs),
-      ])
+      const promises = []
+
+      // Only save profile if it changed
+      if (profileChanged) {
+        console.log("[Profile] Saving profile with userId:", userId, "name:", tempName.trim())
+        promises.push(
+          saveProfile({
+            user_id: userId,
+            name: tempName.trim(),
+            profile_photo: nextProfilePhotoKey || undefined,
+          })
+        )
+      }
+
+      // Only save preferences if they changed
+      if (prefsChanged) {
+        console.log("[Profile] Saving preferences with userId:", userId)
+        promises.push(savePreferences({ ...tempPrefs, user_id: userId }))
+      }
+
+      await Promise.all(promises)
+      console.log("[Profile] Profile and preferences saved successfully")
+
+      // Only refresh recommendations if preferences changed
+      if (prefsChanged) {
+        await refreshRecommendations(userId)
+        console.log("[Profile] Recommendations refreshed")
+      }
 
       setDisplayName(tempName)
       if (tempAvatar) {
@@ -319,9 +390,12 @@ export default function Profile() {
       setProfilePhotoKey(nextProfilePhotoKey)
       setPreferences(tempPrefs)
       setIsEditing(false)
-      setPrefsStatusSuccess("Profile and preferences saved.")
+      setPrefsStatusSuccess("Profile and preferences saved. Recommendations refreshed.")
+      setPrefsStatusError("")
     } catch (error) {
-      setPrefsStatusError((error as Error).message || "Failed to save profile and preferences.")
+      const errorMsg = (error as Error).message || "Failed to save profile and preferences."
+      console.error("[Profile] Save error:", error, "userId:", userId)
+      setPrefsStatusError(errorMsg)
     } finally {
       setIsLoadingPrefs(false)
     }

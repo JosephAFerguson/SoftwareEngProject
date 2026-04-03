@@ -70,6 +70,10 @@
   cursor: auto;
 }
 
+.listingCard.recommended {
+  border: 2px solid gold;
+}
+
 .listingsGrid:has(.expanded) .listingCard:not(.expanded) {
   display: none;
 }

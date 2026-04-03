@@ -89,7 +89,7 @@ func (s *RecommendationService) GetByUserID(userID int, topN int, persist bool) 
 
 	preference, err := s.preferenceRepo.GetByUserID(userID)
 	if err != nil {
-		return nil, err
+		return []models.RecommendedRental{}, nil
 	}
 
 	allListings, err := s.rentalRepo.GetAll()
