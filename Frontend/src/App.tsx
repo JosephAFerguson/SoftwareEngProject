@@ -18,6 +18,7 @@ function Layout() {
       <GoogleMapsProvider>
         <Routes>
           <Route path="/" element={<Find />} />
+          <Route path="/find" element={<Find />} />
           <Route path="/host" element={<Host />} />
           <Route path="/profile" element={<Profile />} />
           <Route path="/inbox" element={<Inbox />} />
