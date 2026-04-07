@@ -380,6 +380,7 @@ export default function Host() {
 
       await updateRental(payload);
       await fetchExistingListing(userId);
+      window.dispatchEvent(new Event("listing-status-changed"));
       setIsEditingListing(false);
       setListingEditSuccess("Listing updated successfully.");
     } catch (error) {

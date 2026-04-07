@@ -48,7 +48,7 @@ export default function Login() {
       }
       setSignedIn(true)
       setUserId(userId)
-      navigate("/")
+      navigate("/find")
     } catch (error) {
       setErrorMessage((error as Error).message || "Failed to log in.")
     } finally {

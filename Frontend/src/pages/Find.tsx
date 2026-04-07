@@ -79,6 +79,58 @@ const defaultCenter = {
   lng: -84.5165,
 };
 
+const geocodeCache = new Map<string, { lat: number; lng: number }>();
+
+function getStableFallbackCoords(address: string, index: number) {
+  const seedSource = `${address}-${index}`;
+  let hash = 0;
+
+  for (let i = 0; i < seedSource.length; i += 1) {
+    hash = (hash << 5) - hash + seedSource.charCodeAt(i);
+    hash |= 0;
+  }
+
+  const latOffset = ((hash % 1000) / 1000) * 0.02 - 0.01;
+  const lngOffset = ((((hash * 31) % 1000) / 1000) * 0.02) - 0.01;
+
+  return {
+    lat: defaultCenter.lat + latOffset,
+    lng: defaultCenter.lng + lngOffset,
+  };
+}
+
+async function getCoordsForAddress(address: string | undefined, index: number) {
+  const normalizedAddress = (address ?? "").trim();
+  if (!normalizedAddress) {
+    return getStableFallbackCoords("missing-address", index);
+  }
+
+  const cachedCoords = geocodeCache.get(normalizedAddress);
+  if (cachedCoords) {
+    return cachedCoords;
+  }
+
+  try {
+    if (typeof window !== "undefined" && window.google?.maps?.Geocoder) {
+      const geocoder = new window.google.maps.Geocoder();
+      const geocodeResult = await geocoder.geocode({ address: normalizedAddress });
+      const location = geocodeResult.results?.[0]?.geometry?.location;
+
+      if (location) {
+        const coords = { lat: location.lat(), lng: location.lng() };
+        geocodeCache.set(normalizedAddress, coords);
+        return coords;
+      }
+    }
+  } catch (error) {
+    console.warn(`[MAP] Geocoding failed for address: ${normalizedAddress}`, error);
+  }
+
+  const fallbackCoords = getStableFallbackCoords(normalizedAddress, index);
+  geocodeCache.set(normalizedAddress, fallbackCoords);
+  return fallbackCoords;
+}
+
 // ============================================================================
 // AWS S3 CONFIGURATION
 // ============================================================================
@@ -144,6 +196,7 @@ async function getS3PhotoUrl(
 
 async function mapRentalToListing(rental: RentalApiResponse, index: number): Promise<Listing> {
   let photoUrls: string[] = [];
+  const coords = await getCoordsForAddress(rental.address, index);
 
   if (rental.photos && Array.isArray(rental.photos)) {
     console.log(`[S3] Processing ${rental.photos.length} photos for listing ${rental.listing_id}:`, rental.photos);
@@ -163,8 +216,8 @@ async function mapRentalToListing(rental: RentalApiResponse, index: number): Pro
     title: rental.title || `Rental at ${rental.address}`,
     price: Number(rental.price || 0),
     address: rental.address || "",
-    lat: 39.1310 + (Math.random() - 0.5) * 0.01,
-    lng: -84.5165 + (Math.random() - 0.5) * 0.01,
+    lat: coords.lat,
+    lng: coords.lng,
     imageUrl: photoUrls.length > 0 ? photoUrls[0] : "",
     sqft: rental.sqft,
     roommates: rental.roommates,
@@ -212,6 +265,17 @@ export default function Find() {
 
   useEffect(() => {
     fetchAllListings();
+  }, []);
+
+  useEffect(() => {
+    const refreshListings = () => {
+      void fetchAllListings();
+    };
+
+    window.addEventListener("listing-status-changed", refreshListings);
+    return () => {
+      window.removeEventListener("listing-status-changed", refreshListings);
+    };
   }, []);
 
   useEffect(() => {
