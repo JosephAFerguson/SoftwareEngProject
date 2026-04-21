@@ -1,0 +1,25 @@
+When no city labels are provided, integer labels should be used. ... Chosen railway paths:
+0 -> 2: 0 -> 1 -> 2 | cost = 8
+
+Total railway cost = 8
+ok
+test_clone_is_independent (__main__.TestUnionFind.test_clone_is_independent)
+Changes to a clone must not affect the original. ... ok
+test_clone_preserves_existing_state (__main__.TestUnionFind.test_clone_preserves_existing_state)
+The clone should start with the same component assignments. ... ok
+test_initial_roots_are_self (__main__.TestUnionFind.test_initial_roots_are_self)
+Each city starts as its own root — all components are disjoint. ... ok
+test_merge_different_sets_returns_true (__main__.TestUnionFind.test_merge_different_sets_returns_true) ... ok
+test_merge_same_set_returns_false (__main__.TestUnionFind.test_merge_same_set_returns_false)
+Attempting to merge two already-connected cities signals a cycle. ... ok
+test_merged_nodes_share_root (__main__.TestUnionFind.test_merged_nodes_share_root) ... ok
+test_path_compression_does_not_change_logical_structure (__main__.TestUnionFind.test_path_compression_does_not_change_logical_structure)
+Path compression is an optimization; roots should stay consistent. ... ok
+test_transitive_connection (__main__.TestUnionFind.test_transitive_connection)
+After merging 0-1 and 1-2, cities 0 and 2 should share a root. ... ok
+test_unmerged_nodes_have_different_roots (__main__.TestUnionFind.test_unmerged_nodes_have_different_roots) ... ok
+
+----------------------------------------------------------------------
+Ran 24 tests in 0.005s
+
+OK

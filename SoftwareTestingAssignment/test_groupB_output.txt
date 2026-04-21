@@ -1,0 +1,25 @@
+test_add_node_expands_matrix_dimensions (__main__.TestWeightedDiGraph.test_add_node_expands_matrix_dimensions) ... ok
+test_add_node_increments_vertex_count (__main__.TestWeightedDiGraph.test_add_node_increments_vertex_count) ... ok
+test_connect_all_does_not_overwrite_existing_edges (__main__.TestWeightedDiGraph.test_connect_all_does_not_overwrite_existing_edges)
+Pre-existing edge weights should be preserved by connect_all. ... ok
+test_connect_all_fills_every_off_diagonal_entry (__main__.TestWeightedDiGraph.test_connect_all_fills_every_off_diagonal_entry)
+After connect_all, every city pair (i != j) must have a positive weight. ... ok
+test_get_edge_returns_none_when_missing (__main__.TestWeightedDiGraph.test_get_edge_returns_none_when_missing) ... ok
+test_get_edge_returns_weight (__main__.TestWeightedDiGraph.test_get_edge_returns_weight) ... ok
+test_get_edges_empty_graph (__main__.TestWeightedDiGraph.test_get_edges_empty_graph) ... ok
+test_get_edges_returns_all_edges (__main__.TestWeightedDiGraph.test_get_edges_returns_all_edges) ... ok
+test_get_neighbors_invalid_vertex_returns_empty (__main__.TestWeightedDiGraph.test_get_neighbors_invalid_vertex_returns_empty) ... ok
+test_get_neighbors_isolated_node_returns_empty (__main__.TestWeightedDiGraph.test_get_neighbors_isolated_node_returns_empty) ... ok
+test_get_neighbors_returns_correct_pairs (__main__.TestWeightedDiGraph.test_get_neighbors_returns_correct_pairs) ... ok
+test_init_creates_zero_matrix (__main__.TestWeightedDiGraph.test_init_creates_zero_matrix)
+A fresh graph should have all zeros in its adjacency matrix. ... ok
+test_isEdge_false_no_edge (__main__.TestWeightedDiGraph.test_isEdge_false_no_edge) ... ok
+test_isEdge_false_out_of_range (__main__.TestWeightedDiGraph.test_isEdge_false_out_of_range) ... ok
+test_isEdge_true (__main__.TestWeightedDiGraph.test_isEdge_true) ... ok
+test_isVertex_out_of_bounds (__main__.TestWeightedDiGraph.test_isVertex_out_of_bounds) ... ok
+test_isVertex_valid_bounds (__main__.TestWeightedDiGraph.test_isVertex_valid_bounds) ... ok
+
+----------------------------------------------------------------------
+Ran 45 tests in 0.005s
+
+OK
