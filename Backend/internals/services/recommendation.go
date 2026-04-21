@@ -49,7 +49,7 @@ func NewRecommendationService(
 ) *RecommendationService {
 	pythonExecutable := strings.TrimSpace(os.Getenv("PYTHON_EXECUTABLE"))
 	if pythonExecutable == "" {
-		pythonExecutable = "python"
+		pythonExecutable = "C:/AnacondaInstall/envs/sfteng/python.exe"
 	}
 
 	return &RecommendationService{

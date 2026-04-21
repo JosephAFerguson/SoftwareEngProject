@@ -1,0 +1,146 @@
+test_known_shortest_distances_from_city_0 (__main__.TestDijkstra.test_known_shortest_distances_from_city_0)
+From city 0 in the sparse graph: ... ok
+test_predecessor_array_reflects_cheapest_route (__main__.TestDijkstra.test_predecessor_array_reflects_cheapest_route)
+On the cheapest path 0->1->2, city 2's predecessor should be 1, ... ok
+test_single_node_graph (__main__.TestDijkstra.test_single_node_graph) ... ok
+test_start_city_distance_is_zero (__main__.TestDijkstra.test_start_city_distance_is_zero) ... ok
+test_start_predecessor_is_none (__main__.TestDijkstra.test_start_predecessor_is_none)
+The starting city has no predecessor. ... ok
+test_unreachable_cities_remain_infinite (__main__.TestDijkstra.test_unreachable_cities_remain_infinite)
+Cities 4 and 5 are isolated from city 0, so distance stays infinity. ... ok
+test_all_returned_paths_start_and_end_correctly (__main__.TestKShortestSimplePaths.test_all_returned_paths_start_and_end_correctly) ... ok
+test_cheapest_path_comes_first (__main__.TestKShortestSimplePaths.test_cheapest_path_comes_first)
+Boston->Denver: cheapest path is [0,1,2] at cost 7. ... ok
+test_k_limits_number_of_results (__main__.TestKShortestSimplePaths.test_k_limits_number_of_results) ... ok
+test_no_path_returns_empty_list (__main__.TestKShortestSimplePaths.test_no_path_returns_empty_list)
+City 0 cannot reach city 4; no paths should be returned. ... ok
+test_paths_are_ordered_by_cost (__main__.TestKShortestSimplePaths.test_paths_are_ordered_by_cost)
+Results must be in non-decreasing order of cost. ... ok
+test_returned_paths_are_simple (__main__.TestKShortestSimplePaths.test_returned_paths_are_simple)
+No city should appear more than once in any returned path. ... ok
+test_second_path_is_more_expensive (__main__.TestKShortestSimplePaths.test_second_path_is_more_expensive)
+The second-best path Boston->Denver is the direct edge [0,2] at cost 9. ... ok
+test_longer_path_cost (__main__.TestPathCost.test_longer_path_cost)
+[0, 1, 2, 3]: 4 + 3 + 2 = 9. ... ok
+test_multi_hop_cost (__main__.TestPathCost.test_multi_hop_cost)
+[0, 1, 2] on the sparse graph: 4 + 3 = 7. ... ok
+test_single_hop_direct_edge (__main__.TestPathCost.test_single_hop_direct_edge)
+The direct edge [0, 2] has cost 9. ... ok
+test_single_node_path_is_zero_cost (__main__.TestPathCost.test_single_node_path_is_zero_cost)
+A path with only one city uses no edges, so cost is 0. ... ok
+test_edge_count_equals_path_length_minus_one (__main__.TestPathToEdges.test_edge_count_equals_path_length_minus_one) ... ok
+test_multi_hop_produces_correct_edges (__main__.TestPathToEdges.test_multi_hop_produces_correct_edges) ... ok
+test_single_hop_produces_one_edge (__main__.TestPathToEdges.test_single_hop_produces_one_edge) ... ok
+test_single_node_produces_no_edges (__main__.TestPathToEdges.test_single_node_produces_no_edges) ... ok
+test_multi_hop_path (__main__.TestReconstructPath.test_multi_hop_path)
+Boston->Denver should be routed as [0, 1, 2] (via Chicago). ... ok
+test_path_ends_at_destination (__main__.TestReconstructPath.test_path_ends_at_destination) ... ok
+test_path_starts_at_source (__main__.TestReconstructPath.test_path_starts_at_source) ... ok
+test_same_start_and_end_returns_single_element (__main__.TestReconstructPath.test_same_start_and_end_returns_single_element) ... ok
+test_unreachable_destination_returns_none (__main__.TestReconstructPath.test_unreachable_destination_returns_none)
+City 4 is unreachable from city 0. ... ok
+test_check_acyclic_does_not_mutate_tracker (__main__.TestSimulation.test_check_acyclic_does_not_mutate_tracker)
+check_acyclic_path works on a clone internally and must leave the ... ok
+test_check_acyclic_path_detects_cycle (__main__.TestSimulation.test_check_acyclic_path_detects_cycle)
+After committing edge 0->1, the reverse path [1, 0] closes a cycle ... ok
+test_check_acyclic_path_safe_on_fresh_tracker (__main__.TestSimulation.test_check_acyclic_path_safe_on_fresh_tracker)
+Any path should be cycle-free when no routes have been committed yet. ... ok
+test_commit_route_does_not_affect_unrelated_cities (__main__.TestSimulation.test_commit_route_does_not_affect_unrelated_cities)
+Cities outside the committed path must remain in their own components. ... ok
+test_commit_route_merges_all_cities_on_path (__main__.TestSimulation.test_commit_route_merges_all_cities_on_path)
+After committing [0, 1, 2], all three cities must share a component. ... ok
+test_format_route_produces_arrow_separated_names (__main__.TestSimulation.test_format_route_produces_arrow_separated_names) ... ok
+test_format_route_single_city (__main__.TestSimulation.test_format_route_single_city) ... ok
+test_run_simulation_avoids_cycles_across_tickets (__main__.TestSimulation.test_run_simulation_avoids_cycles_across_tickets)
+Routing tickets (0->2) then (2->3) must not create a cycle even though ... Chosen railway paths:
+Boston -> Denver: Boston -> Chicago -> Denver | cost = 7
+Denver -> Phoenix: Denver -> Phoenix | cost = 2
+
+Total railway cost = 9
+ok
+test_run_simulation_each_path_entry_structure (__main__.TestSimulation.test_run_simulation_each_path_entry_structure)
+Each entry in result['paths'] should be a 3-tuple: ... Chosen railway paths:
+Boston -> Denver: Boston -> Chicago -> Denver | cost = 7
+
+Total railway cost = 7
+ok
+test_run_simulation_picks_cheapest_valid_path (__main__.TestSimulation.test_run_simulation_picks_cheapest_valid_path)
+Boston->Denver: the direct route (cost 9) must be skipped in favour of ... Chosen railway paths:
+Boston -> Denver: Boston -> Chicago -> Denver | cost = 7
+
+Total railway cost = 7
+ok
+test_run_simulation_result_structure (__main__.TestSimulation.test_run_simulation_result_structure)
+The returned dictionary must contain 'paths' and 'total_cost' keys. ... Chosen railway paths:
+Portland -> San Diego: Portland -> San Diego | cost = 5
+
+Total railway cost = 5
+ok
+test_run_simulation_returns_correct_path_count (__main__.TestSimulation.test_run_simulation_returns_correct_path_count)
+One path entry must be returned per ticket. ... Chosen railway paths:
+Boston -> Denver: Boston -> Chicago -> Denver | cost = 7
+Denver -> Phoenix: Denver -> Phoenix | cost = 2
+Portland -> San Diego: Portland -> San Diego | cost = 5
+
+Total railway cost = 14
+ok
+test_run_simulation_returns_none_for_impossible_ticket (__main__.TestSimulation.test_run_simulation_returns_none_for_impossible_ticket)
+If a ticket has no valid path at all, run_simulation must return None. ... No valid acyclic path found for ticket 0 -> 1
+ok
+test_run_simulation_total_cost (__main__.TestSimulation.test_run_simulation_total_cost)
+Known result for the sparse graph tickets: ... Chosen railway paths:
+Boston -> Denver: Boston -> Chicago -> Denver | cost = 7
+Denver -> Phoenix: Denver -> Phoenix | cost = 2
+Portland -> San Diego: Portland -> San Diego | cost = 5
+
+Total railway cost = 14
+ok
+test_run_simulation_uses_numeric_labels_when_none_given (__main__.TestSimulation.test_run_simulation_uses_numeric_labels_when_none_given)
+When no city labels are provided, integer labels should be used. ... Chosen railway paths:
+0 -> 2: 0 -> 1 -> 2 | cost = 8
+
+Total railway cost = 8
+ok
+test_clone_is_independent (__main__.TestUnionFind.test_clone_is_independent)
+Changes to a clone must not affect the original. ... ok
+test_clone_preserves_existing_state (__main__.TestUnionFind.test_clone_preserves_existing_state)
+The clone should start with the same component assignments. ... ok
+test_initial_roots_are_self (__main__.TestUnionFind.test_initial_roots_are_self)
+Each city starts as its own root — all components are disjoint. ... ok
+test_merge_different_sets_returns_true (__main__.TestUnionFind.test_merge_different_sets_returns_true) ... ok
+test_merge_same_set_returns_false (__main__.TestUnionFind.test_merge_same_set_returns_false)
+Attempting to merge two already-connected cities signals a cycle. ... ok
+test_merged_nodes_share_root (__main__.TestUnionFind.test_merged_nodes_share_root) ... ok
+test_path_compression_does_not_change_logical_structure (__main__.TestUnionFind.test_path_compression_does_not_change_logical_structure)
+Path compression is an optimization; roots should stay consistent. ... ok
+test_transitive_connection (__main__.TestUnionFind.test_transitive_connection)
+After merging 0-1 and 1-2, cities 0 and 2 should share a root. ... ok
+test_unmerged_nodes_have_different_roots (__main__.TestUnionFind.test_unmerged_nodes_have_different_roots) ... ok
+test_add_edge_is_directed (__main__.TestWeightedDiGraph.test_add_edge_is_directed)
+Adding edge (0->1) must NOT automatically create the reverse (1->0). ... ok
+test_add_edge_sets_weight (__main__.TestWeightedDiGraph.test_add_edge_sets_weight) ... ok
+test_add_node_expands_matrix_dimensions (__main__.TestWeightedDiGraph.test_add_node_expands_matrix_dimensions) ... ok
+test_add_node_increments_vertex_count (__main__.TestWeightedDiGraph.test_add_node_increments_vertex_count) ... ok
+test_connect_all_does_not_overwrite_existing_edges (__main__.TestWeightedDiGraph.test_connect_all_does_not_overwrite_existing_edges)
+Pre-existing edge weights should be preserved by connect_all. ... ok
+test_connect_all_fills_every_off_diagonal_entry (__main__.TestWeightedDiGraph.test_connect_all_fills_every_off_diagonal_entry)
+After connect_all, every city pair (i != j) must have a positive weight. ... ok
+test_get_edge_returns_none_when_missing (__main__.TestWeightedDiGraph.test_get_edge_returns_none_when_missing) ... ok
+test_get_edge_returns_weight (__main__.TestWeightedDiGraph.test_get_edge_returns_weight) ... ok
+test_get_edges_empty_graph (__main__.TestWeightedDiGraph.test_get_edges_empty_graph) ... ok
+test_get_edges_returns_all_edges (__main__.TestWeightedDiGraph.test_get_edges_returns_all_edges) ... ok
+test_get_neighbors_invalid_vertex_returns_empty (__main__.TestWeightedDiGraph.test_get_neighbors_invalid_vertex_returns_empty) ... ok
+test_get_neighbors_isolated_node_returns_empty (__main__.TestWeightedDiGraph.test_get_neighbors_isolated_node_returns_empty) ... ok
+test_get_neighbors_returns_correct_pairs (__main__.TestWeightedDiGraph.test_get_neighbors_returns_correct_pairs) ... ok
+test_init_creates_zero_matrix (__main__.TestWeightedDiGraph.test_init_creates_zero_matrix)
+A fresh graph should have all zeros in its adjacency matrix. ... ok
+test_isEdge_false_no_edge (__main__.TestWeightedDiGraph.test_isEdge_false_no_edge) ... ok
+test_isEdge_false_out_of_range (__main__.TestWeightedDiGraph.test_isEdge_false_out_of_range) ... ok
+test_isEdge_true (__main__.TestWeightedDiGraph.test_isEdge_true) ... ok
+test_isVertex_out_of_bounds (__main__.TestWeightedDiGraph.test_isVertex_out_of_bounds) ... ok
+test_isVertex_valid_bounds (__main__.TestWeightedDiGraph.test_isVertex_valid_bounds) ... ok
+
+----------------------------------------------------------------------
+Ran 69 tests in 0.011s
+
+OK
